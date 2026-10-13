@@ -1,0 +1,52 @@
+Functional Requirements
+System Management (Dashboard & Booking)
+● Authentication: The system shall allow users to register, log in, and log out as either
+an Admin or a Player.
+● Player Capabilities:
+○ The system shall allow a logged-in Player to view available escape rooms.
+○ The system shall allow a Player to create an appointment/reservation and
+specify team members.
+○ The system shall allow a Player to immediately launch an available game
+session.
+● Admin Capabilities:
+○ The system shall provide a dashboard for Admins displaying business data,
+past games, and currently active games with live progress and scores.
+○ The system shall allow an Admin to view room details, including specific
+puzzles, resolution steps, and required resources.
+○ The system shall allow Admins to manage, reorganize, and cancel schedule
+reservations.
+● Game Administration: The system shall calculate and display the final score and
+completion time to both the Player (in-game) and the Admin (in the dashboard) upon
+game completion.
+Escape Room Client (Game Experience)
+● Interactive Puzzles: The game shall present on-screen objects that display puzzle
+messages when interacted with (e.g., via mouse clicks).
+● Assistance: The game shall provide a mechanism for players to request hints or
+help during a session.
+● Exit Mechanism: The game shall provide an interface option for players to
+voluntarily leave the room before the time expires.
+Non-Functional Requirements
+To meet the criteria in Chapter 3, phrases like "run flawless" and "look smooth" must be
+translated into quantifiable specifications.
+● Capacity & Performance: The management backend shall concurrently host and
+track live data for up to 3 active escape rooms without degradation.
+● Response Time: The system shall initiate and load a new game session in under 5
+seconds from the moment a Player clicks "start".
+● Availability: The backend management system shall maintain 99.9% uptime to
+support constant reservation access.
+● Client Performance: The escape room game client shall maintain a minimum
+rendering speed of 60 frames per second (FPS) to ensure smooth visual
+performance.
+Architecture & Tech Stack
+Separating the management system from the game client is a standard and highly effective
+architecture.
+For the backend and management dashboard, leveraging the TypeScript ecosystem with
+Bun, Hono, React, PostgreSQL, and Drizzle ORM provides a fast, type-safe environment
+that perfectly handles the CRUD operations for reservations and dashboard analytics.
+For the escape room itself, building a dedicated client in Unity with C# is a very strong
+choice for a 2D point-and-click setup. A pixel-art perspective—perhaps with a crisp,
+top-down visual style akin to Enter the Gungeon—fits naturally with mouse-driven object
+interactions and pop-up puzzle mechanics. Unity handles complex state logic and asset
+management much more cleanly than a DOM-based web framework when building spatial
+puzzles. You can then connect the Unity WebGL build or standalone client to your Hono
+backend via REST APIs to report scores, request hints, and verify session tokens

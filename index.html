@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Escape Ops — Admin Dashboard</title>
+<style>
+  :root {
+    --bg: #0b0b0c;
+    --card: #1c1c1f;
+    --card-2: #232327;
+    --line: #2c2c31;
+    --text: #f5f5f5;
+    --muted: #9a9aa0;
+    --lime: #c6f16d;
+    --lime-ink: #1a2405;
+    --orange: #f5a524;
+    --orange-ink: #2d1c02;
+    --white-pill: #f2f2f0;
+    --radius: 20px;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 14px; line-height: 1.45;
+  }
+  .wrap { max-width: 1380px; margin: 0 auto; padding: 20px 28px 48px; }
+  /* top bar */
+  .topbar { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; flex-wrap: wrap; }
+  .logo {
+    width: 44px; height: 44px; border-radius: 50%; background: var(--white-pill); color: #111;
+    display: grid; place-items: center; font-weight: 800; font-size: 18px; letter-spacing: -1px;
+  }
+  .pill-nav { display: flex; gap: 10px; flex-wrap: wrap; }
+  .pill {
+    background: var(--card); border: 1px solid transparent; color: var(--text);
+    border-radius: 999px; padding: 10px 18px; font-size: 13px; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 8px; text-decoration: none;
+  }
+  .pill:hover { border-color: var(--line); }
+  .pill.active { background: var(--white-pill); color: #111; font-weight: 600; }
+  .pill .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--lime); }
+  .pill .count { background: var(--orange); color: #111; border-radius: 999px; font-size: 11px; font-weight: 700; padding: 1px 8px; }
+  .spacer { flex: 1; }
+  .search {
+    background: var(--card); border: none; color: var(--text);
+    border-radius: 999px; padding: 10px 16px; width: 180px; outline: none;
+  }
+  .search::placeholder { color: var(--muted); }
+  .admin { display: flex; align-items: center; gap: 10px; }
+  .admin .meta { text-align: right; }
+  .admin .meta b { display: block; font-size: 13px; }
+  .admin .meta span { color: var(--muted); font-size: 12px; }
+  .avatar {
+    width: 40px; height: 40px; border-radius: 50%; background: var(--lime); color: var(--lime-ink);
+    display: grid; place-items: center; font-weight: 800;
+  }
+  /* title row */
+  .title-row { display: flex; align-items: end; gap: 16px; margin: 8px 0 18px; flex-wrap: wrap; }
+  .title-row h1 { margin: 0; font-size: 34px; letter-spacing: 1px; font-weight: 800; }
+  .title-row p { margin: 0 0 6px; color: var(--muted); font-size: 13px; }
+  .filters { margin-left: auto; display: flex; gap: 10px; flex-wrap: wrap; }
+  .filters select {
+    background: var(--card); color: var(--text); border: none; border-radius: 999px;
+    padding: 10px 14px; font-size: 13px; outline: none; cursor: pointer;
+  }
+  /* grid */
+  .grid { display: grid; grid-template-columns: 1fr 400px; gap: 20px; }
+  @media (max-width: 1080px) { .grid { grid-template-columns: 1fr; } }
+  .col { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+  .card {
+    background: var(--card); border-radius: var(--radius); padding: 20px 22px;
+  }
+  .card h2 { margin: 0 0 4px; font-size: 12px; letter-spacing: 1.5px; color: var(--text); font-weight: 700; }
+  .card .sub { color: var(--muted); font-size: 12px; margin: 0 0 14px; }
+  .card-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+  .kebab { color: var(--muted); cursor: pointer; background: none; border: none; font-size: 18px; letter-spacing: 2px; }
+  /* live games */
+  .live-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  @media (max-width: 760px) { .live-row { grid-template-columns: 1fr; } }
+  .slot { background: var(--card-2); border: 1px solid var(--line); border-radius: 16px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+  .slot.empty { border-style: dashed; color: var(--muted); justify-content: center; align-items: center; min-height: 210px; text-align: center; }
+  .slot-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .room-tag { font-size: 12px; font-weight: 700; letter-spacing: .4px; }
+  .timer { font-variant-numeric: tabular-nums; font-weight: 800; font-size: 20px; }
+  .timer.low { color: var(--orange); }
+  .team { color: var(--muted); font-size: 12px; }
+  .bar { height: 8px; background: #101012; border-radius: 999px; overflow: hidden; }
+  .bar > i { display: block; height: 100%; background: var(--lime); border-radius: 999px; transition: width .8s linear; }
+  .stat-line { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); }
+  .stat-line b { color: var(--text); font-variant-numeric: tabular-nums; }
+  .btn-row { display: flex; gap: 8px; margin-top: 2px; }
+  button { font-family: inherit; }
+  .btn {
+    border: none; border-radius: 999px; padding: 8px 14px; font-size: 12px; font-weight: 700;
+    cursor: pointer; background: var(--white-pill); color: #111;
+  }
+  .btn.ghost { background: transparent; color: var(--text); border: 1px solid var(--line); }
+  .btn.lime { background: var(--lime); color: var(--lime-ink); }
+  .btn.warn { background: var(--orange); color: var(--orange-ink); }
+  .btn:disabled { opacity: .45; cursor: default; }
+  /* kpi */
+  .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  @media (max-width: 760px) { .kpis { grid-template-columns: repeat(2, 1fr); } }
+  .kpi b { font-size: 26px; display: block; font-variant-numeric: tabular-nums; }
+  .kpi span { color: var(--muted); font-size: 12px; }
+  .delta-up { color: var(--lime); font-size: 12px; font-weight: 700; }
+  .delta-down { color: var(--orange); font-size: 12px; font-weight: 700; }
+  /* rooms */
+  .room { border: 1px solid var(--line); border-radius: 16px; padding: 14px 16px; margin-top: 12px; background: var(--card-2); }
+  .room-head { display: flex; align-items: center; gap: 10px; }
+  .room-head b { font-size: 14px; }
+  .diff { font-size: 11px; font-weight: 700; border-radius: 999px; padding: 2px 10px; }
+  .diff.hard { background: var(--orange); color: var(--orange-ink); }
+  .diff.med { background: var(--white-pill); color: #111; }
+  .diff.easy { background: var(--lime); color: var(--lime-ink); }
+  .room-head .spacer { flex: 1; }
+  .puzzle { border-top: 1px solid var(--line); margin-top: 10px; padding-top: 10px; font-size: 13px; }
+  .puzzle summary { cursor: pointer; font-weight: 600; }
+  .puzzle ol { margin: 8px 0 4px 18px; padding: 0; color: var(--muted); }
+  .puzzle li { margin: 2px 0; }
+  .res { color: var(--muted); font-size: 12px; }
+  /* timeline */
+  .t-row { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-top: 1px solid var(--line); }
+  .t-row:first-of-type { border-top: none; }
+  .t-date { width: 52px; color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+  .t-pill {
+    flex: 1; border-radius: 999px; padding: 8px 12px; font-size: 12px; font-weight: 600;
+    display: flex; align-items: center; gap: 8px; min-width: 0;
+  }
+  .t-pill.confirmed { background: var(--lime); color: var(--lime-ink); }
+  .t-pill.pending { background: var(--orange); color: var(--orange-ink); }
+  .t-pill.completed { background: var(--white-pill); color: #111; }
+  .t-pill .grow { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .mini-btn { border: none; border-radius: 999px; font-size: 11px; font-weight: 700; padding: 4px 10px; cursor: pointer; background: rgba(0,0,0,.18); color: inherit; }
+  .legend { display: flex; gap: 14px; margin-top: 12px; font-size: 12px; color: var(--muted); }
+  .legend i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+  /* table */
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; color: var(--muted); font-weight: 600; font-size: 11px; letter-spacing: .8px; text-transform: uppercase; padding: 8px 6px; border-bottom: 1px solid var(--line); }
+  td { padding: 9px 6px; border-bottom: 1px solid var(--line); font-variant-numeric: tabular-nums; }
+  tr:last-child td { border-bottom: none; }
+  .toast {
+    position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%);
+    background: var(--white-pill); color: #111; border-radius: 999px; padding: 10px 20px;
+    font-size: 13px; font-weight: 600; display: none;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="topbar">
+    <div class="logo">ER</div>
+    <nav class="pill-nav" id="nav">
+      <a class="pill active" href="#live">Live <span class="count" id="liveCount">2</span></a>
+      <a class="pill" href="#business">Business</a>
+      <a class="pill" href="#rooms">Rooms</a>
+      <a class="pill" href="#bookings">Bookings</a>
+      <a class="pill" href="#past">Past games</a>
+    </nav>
+    <div class="spacer"></div>
+    <input class="search" id="search" type="search" placeholder="Search team or room…" aria-label="Search team or room" />
+    <div class="admin">
+      <div class="meta"><b>Admin</b><span>owner</span></div>
+      <div class="avatar">A</div>
+    </div>
+  </header>
+
+  <div class="title-row">
+    <div>
+      <h1>ESCAPE OPS</h1>
+      <p>Admin dashboard · 3 rooms max concurrent · game start target &lt; 5s</p>
+    </div>
+    <div class="filters">
+      <select id="fDate" aria-label="Date filter">
+        <option value="all">Date: All</option>
+        <option value="today" selected>Date: Today</option>
+        <option value="week">Date: This week</option>
+      </select>
+      <select id="fRoom" aria-label="Room filter">
+        <option value="all">Room: All</option>
+        <option value="vault">Vault Heist</option>
+        <option value="pharaoh">Pharaoh's Curse</option>
+        <option value="sub">Submarine SOS</option>
+      </select>
+      <select id="fStatus" aria-label="Status filter">
+        <option value="all">Status: All</option>
+        <option value="confirmed">Confirmed</option>
+        <option value="pending">Pending</option>
+        <option value="completed">Completed</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="col">
+      <section class="card" id="live">
+        <div class="card-head"><div><h2>LIVE GAMES</h2><p class="sub">Active sessions with progress, score, timer. Capacity 3 concurrent.</p></div><button class="kebab" aria-label="More">···</button></div>
+        <div class="live-row" id="liveRow"></div>
+      </section>
+
+      <section class="card" id="business">
+        <div class="card-head"><div><h2>BUSINESS TODAY</h2><p class="sub">Revenue, occupancy, completion quality.</p></div><button class="kebab" aria-label="More">···</button></div>
+        <div class="kpis">
+          <div class="kpi"><span class="delta-up">▲ 8%</span><b>€1,240</b><span>Revenue</span></div>
+          <div class="kpi"><span class="delta-up">▲ 4%</span><b id="kOcc">78%</b><span>Occupancy</span></div>
+          <div class="kpi"><span class="delta-down">▼ 2%</span><b>8,410</b><span>Avg score</span></div>
+          <div class="kpi"><span class="delta-up">▲ 1%</span><b>41:20</b><span>Avg escape time</span></div>
+        </div>
+        <svg id="spark" viewBox="0 0 400 60" width="100%" height="60" style="margin-top:12px" aria-hidden="true">
+          <polyline id="sparkLine" fill="none" stroke="#c6f16d" stroke-width="2" points="" />
+          <polyline id="sparkLine2" fill="none" stroke="#f5a524" stroke-width="2" points="" />
+        </svg>
+      </section>
+
+      <section class="card" id="rooms">
+        <div class="card-head"><div><h2>ROOMS &amp; PUZZLES</h2><p class="sub">Room details: puzzles, resolution steps, required resources.</p></div><button class="kebab" aria-label="More">···</button></div>
+        <div id="roomList"></div>
+      </section>
+
+      <section class="card" id="past">
+        <div class="card-head"><div><h2>PAST GAMES</h2><p class="sub">Final score + completion time shown to player and admin.</p></div><span class="sub" id="pastTotal"></span></div>
+        <div style="overflow-x:auto">
+        <table>
+          <thead><tr><th>Team</th><th>Room</th><th>Score</th><th>Time</th><th>Hints</th><th>Date</th></tr></thead>
+          <tbody id="pastBody"></tbody>
+        </table>
+        </div>
+      </section>
+    </div>
+
+    <div class="col">
+      <section class="card" id="bookings">
+        <div class="card-head"><div><h2>RESERVATIONS TIMELINE</h2><p class="sub">Manage, reorganize, cancel. Click a pill to see details.</p></div><button class="kebab" aria-label="More">···</button></div>
+        <div id="timeline"></div>
+        <div class="legend"><span><i style="background:var(--lime)"></i>Confirmed</span><span><i style="background:var(--orange)"></i>Pending</span><span><i style="background:#fff"></i>Completed</span></div>
+      </section>
+
+      <section class="card" id="queue">
+        <div class="card-head"><div><h2>START QUEUE</h2><p class="sub">Launch a confirmed booking into a free slot. Target &lt; 5s.</p></div></div>
+        <div id="queueList" style="display:flex;flex-direction:column;gap:10px"></div>
+      </section>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const rooms = [
+  { id: "vault", name: "Vault Heist", diff: "Hard", diffCls: "hard", dur: 60,
+    puzzles: [
+      { name: "Laser grid", steps: ["Find the mirror shard in the plant pot", "Angle the beam to the receiver", "Enter the 4-digit code on the keypad"], res: "Mirror shard · keypad · timer display" },
+      { name: "Safe cracking", steps: ["Listen for clicks (3-turn combo)", "Align tumblers 12-34-07"], res: "Combination safe · stethoscope prop" }
+    ]},
+  { id: "pharaoh", name: "Pharaoh's Curse", diff: "Medium", diffCls: "med", dur: 45,
+    puzzles: [
+      { name: "Hieroglyph wall", steps: ["Match 3 symbols to the cartouche", "Press in order: owl, river, sun"], res: "Symbol tiles · UV lamp" },
+      { name: "Sarcophagus lock", steps: ["Weigh the canopic jars", "Heaviest jar sets the dial"], res: "Jars · dial lock" }
+    ]},
+  { id: "sub", name: "Submarine SOS", diff: "Easy", diffCls: "easy", dur: 30,
+    puzzles: [
+      { name: "Sonar console", steps: ["Tune frequency to 142 Hz", "Confirm contact bearing"], res: "Console · headphones" },
+      { name: "Valve sequence", steps: ["Open valves red → yellow → blue", "Hold pressure at 2 bar"], res: "Valves · pressure gauge" }
+    ]}
+];
+const roomName = id => (rooms.find(r => r.id === id) || {}).name || id;
+
+let live = [
+  { id: "g1", room: "vault", team: "Night Owls (4)", total: 60*60, left: 34*60+12, progress: 46, score: 6230, hints: 2 },
+  { id: "g2", room: "sub", team: "Duo Debug (2)", total: 30*60, left: 9*60+41, progress: 71, score: 8150, hints: 1 }
+];
+let bookings = [
+  { id: "b1", date: "30.09", team: "Night Owls", room: "vault", size: 4, status: "completed" },
+  { id: "b2", date: "29.09", team: "Pixel Pirates", room: "pharaoh", size: 5, status: "pending" },
+  { id: "b3", date: "28.09", team: "Ctrl Escape", room: "sub", size: 3, status: "confirmed" },
+  { id: "b4", date: "27.09", team: "Null Pointers", room: "vault", size: 4, status: "confirmed" },
+  { id: "b5", date: "26.09", team: "Solo Sam", room: "sub", size: 1, status: "pending" },
+  { id: "b6", date: "25.09", team: "Lan Party", room: "pharaoh", size: 6, status: "confirmed" },
+  { id: "b7", date: "24.09", team: "Retro Rascals", room: "vault", size: 3, status: "completed" }
+];
+let past = [
+  { team: "Retro Rascals", room: "vault", score: 7980, time: "52:10", hints: 3, date: "24.09" },
+  { team: "Night Owls", room: "vault", score: 8610, time: "48:33", hints: 2, date: "23.09" },
+  { team: "Ctrl Escape", room: "sub", score: 9120, time: "24:51", hints: 0, date: "22.09" },
+  { team: "Pixel Pirates", room: "pharaoh", score: 7740, time: "44:02", hints: 4, date: "21.09" }
+];
+
+const $ = s => document.querySelector(s);
+const toast = m => { const t = $("#toast"); t.textContent = m; t.style.display = "block"; clearTimeout(t._h); t._h = setTimeout(() => t.style.display = "none", 2200); };
+const fmt = s => `${String(Math.floor(s/60)).padStart(2,"0")}:${String(s%60).padStart(2,"0")}`;
+
+function renderLive() {
+  const row = $("#liveRow"); row.innerHTML = "";
+  live.forEach(g => {
+    const d = document.createElement("div"); d.className = "slot";
+    d.innerHTML = `
+      <div class="slot-top"><span class="room-tag">${roomName(g.room)}</span><span class="timer ${g.left < 600 ? "low" : ""}">${fmt(g.left)}</span></div>
+      <div class="team">${g.team} · ${g.progress}% · ${g.hints} hint${g.hints === 1 ? "" : "s"}</div>
+      <div class="bar"><i style="width:${g.progress}%"></i></div>
+      <div class="stat-line"><span>Score</span><b>${g.score.toLocaleString()}</b></div>
+      <div class="btn-row">
+        <button class="btn ghost" data-act="hint">+ Hint</button>
+        <button class="btn ghost" data-act="detail">Details</button>
+        <button class="btn warn" data-act="end">End</button>
+      </div>`;
+    d.querySelector('[data-act="hint"]').onclick = () => { g.hints++; g.score = Math.max(0, g.score - 150); renderLive(); toast(`Hint sent to ${g.team} (−150 pts)`); };
+    d.querySelector('[data-act="detail"]').onclick = () => {
+      document.querySelector("#rooms").scrollIntoView({ behavior: "smooth" });
+      toast(`${roomName(g.room)}: ${rooms.find(r => r.id === g.room).puzzles.length} puzzles — see Rooms & Puzzles`);
+    };
+    d.querySelector('[data-act="end"]').onclick = () => endGame(g.id);
+    row.appendChild(d);
+  });
+  for (let i = live.length; i < 3; i++) {
+    const e = document.createElement("div"); e.className = "slot empty";
+    e.innerHTML = `<div><b>Slot ${i + 1} free</b><br/>Start a confirmed booking<br/>from the queue.</div>`;
+    row.appendChild(e);
+  }
+  $("#liveCount").textContent = live.length;
+}
+
+function endGame(id) {
+  const i = live.findIndex(g => g.id === id); if (i < 0) return;
+  const g = live[i];
+  const used = g.total - g.left;
+  const time = `${String(Math.floor(used/60)).padStart(2,"0")}:${String(used%60).padStart(2,"0")}`;
+  past.unshift({ team: g.team, room: g.room, score: g.score, time, hints: g.hints, date: "Today" });
+  live.splice(i, 1);
+  renderLive(); renderPast(); renderQueue();
+  toast(`Game ended: ${g.team} — ${g.score.toLocaleString()} pts in ${time}`);
+}
+
+function matchFilters(b) {
+  const q = $("#search").value.trim().toLowerCase();
+  const fr = $("#fRoom").value, fs = $("#fStatus").value;
+  if (fr !== "all" && b.room !== fr) return false;
+  if (fs !== "all" && b.status !== fs) return false;
+  if (q && !(b.team.toLowerCase().includes(q) || roomName(b.room).toLowerCase().includes(q))) return false;
+  return true;
+}
+
+function renderTimeline() {
+  const t = $("#timeline"); t.innerHTML = "";
+  const list = bookings.filter(matchFilters);
+  if (!list.length) { t.innerHTML = `<p class="sub">No reservations match the filters.</p>`; return; }
+  list.forEach(b => {
+    const r = document.createElement("div"); r.className = "t-row";
+    r.innerHTML = `
+      <span class="t-date">${b.date}</span>
+      <div class="t-pill ${b.status}"><span class="grow">${b.team} · ${roomName(b.room)} · ${b.size}pax</span>
+        ${b.status !== "completed" ? `<button class="mini-btn" data-a="move">±1d</button><button class="mini-btn" data-a="cancel">✕</button>` : ""}
+      </div>`;
+    const [mv, cx] = [r.querySelector('[data-a="move"]'), r.querySelector('[data-a="cancel"]')];
+    if (mv) mv.onclick = ev => { ev.stopPropagation(); moveBooking(b.id); };
+    if (cx) cx.onclick = ev => { ev.stopPropagation(); cancelBooking(b.id); };
+    r.querySelector(".t-pill").onclick = () => toast(`${b.team} — ${roomName(b.room)}, ${b.date}, ${b.status}`);
+    t.appendChild(r);
+  });
+}
+
+function moveBooking(id) {
+  const b = bookings.find(x => x.id === id); if (!b) return;
+  const [d, m] = b.date.split(".").map(Number);
+  b.date = `${String(d === 30 ? 24 : d + 1).padStart(2, "0")}.${String(m).padStart(2, "0")}`;
+  renderTimeline(); renderQueue(); toast(`Rescheduled: ${b.team} → ${b.date}`);
+}
+function cancelBooking(id) {
+  const i = bookings.findIndex(x => x.id === id); if (i < 0) return;
+  const [b] = bookings.splice(i, 1);
+  renderTimeline(); renderQueue(); toast(`Cancelled: ${b.team} (${roomName(b.room)})`);
+}
+
+function renderQueue() {
+  const q = $("#queueList"); q.innerHTML = "";
+  const avail = bookings.filter(b => b.status === "confirmed");
+  if (!avail.length) { q.innerHTML = `<p class="sub">No confirmed bookings waiting.</p>`; return; }
+  if (live.length >= 3) { q.innerHTML = `<p class="sub">All 3 slots busy — end a game to free one.</p>`; return; }
+  avail.slice(0, 3).forEach(b => {
+    const d = document.createElement("div");
+    d.style.cssText = "display:flex;align-items:center;gap:10px;background:var(--card-2);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:13px";
+    d.innerHTML = `<span style="flex:1"><b>${b.team}</b> <span style="color:var(--muted)">· ${roomName(b.room)} · ${b.date}</span></span>`;
+    const btn = document.createElement("button"); btn.className = "btn lime"; btn.textContent = "Start < 5s";
+    btn.onclick = () => {
+      if (live.length >= 3) return toast("Capacity reached (3 concurrent).");
+      const rm = rooms.find(r => r.id === b.room);
+      live.push({ id: "g" + Date.now(), room: b.room, team: `${b.team} (${b.size})`, total: rm.dur * 60, left: rm.dur * 60, progress: 0, score: 5000, hints: 0 });
+      b.status = "completed";
+      renderLive(); renderTimeline(); renderQueue(); renderPast();
+      toast(`Launched: ${b.team} in ${roomName(b.room)}`);
+    };
+    d.appendChild(btn); q.appendChild(d);
+  });
+}
+
+function renderRooms() {
+  const el = $("#roomList"); el.innerHTML = "";
+  rooms.forEach(r => {
+    const d = document.createElement("div"); d.className = "room";
+    d.innerHTML = `
+      <div class="room-head"><b>${r.name}</b><span class="diff ${r.diffCls}">${r.diff}</span><span class="res">${r.dur} min · ${r.puzzles.length} puzzles</span><span class="spacer"></span><button class="btn ghost">Details</button></div>
+      <div class="detail" hidden>${r.puzzles.map(p => `
+        <details class="puzzle"><summary>${p.name}</summary>
+          <ol>${p.steps.map(s => `<li>${s}</li>`).join("")}</ol>
+          <div class="res">Resources: ${p.res}</div>
+        </details>`).join("")}</div>`;
+    const det = d.querySelector(".detail"), btn = d.querySelector("button");
+    btn.onclick = () => { det.hidden = !det.hidden; btn.textContent = det.hidden ? "Details" : "Hide"; };
+    el.appendChild(d);
+  });
+}
+
+function renderPast() {
+  const q = $("#search").value.trim().toLowerCase(), fr = $("#fRoom").value;
+  const list = past.filter(p =>
+    (fr === "all" || p.room === fr) &&
+    (!q || p.team.toLowerCase().includes(q) || roomName(p.room).toLowerCase().includes(q)));
+  $("#pastBody").innerHTML = list.map(p =>
+    `<tr><td>${p.team}</td><td>${roomName(p.room)}</td><td>${p.score.toLocaleString()}</td><td>${p.time}</td><td>${p.hints}</td><td>${p.date}</td></tr>`).join("")
+    || `<tr><td colspan="6" style="color:var(--muted)">No past games match.</td></tr>`;
+  $("#pastTotal").textContent = `Total: ${list.length}`;
+}
+
+function spark() {
+  const pts = n => Array.from({ length: 24 }, (_, i) => `${(i / 23 * 400).toFixed(0)},${(30 + Math.sin(i / 2.4) * 14 + (i % 5) * 2 - n).toFixed(0)}`).join(" ");
+  $("#sparkLine").setAttribute("points", pts(4));
+  $("#sparkLine2").setAttribute("points", pts(-6));
+}
+
+["search", "fRoom", "fStatus"].forEach(id => document.addEventListener("input", e => { if (e.target.id === id || e.target.closest("#" + id)) { renderTimeline(); renderPast(); } }));
+$("#fDate").addEventListener("change", () => { renderTimeline(); toast("Date filter is illustrative in this prototype."); });
+
+setInterval(() => {
+  let changed = false;
+  live.forEach(g => {
+    if (g.left > 0) { g.left--; g.progress = Math.min(100, Math.round((1 - g.left / g.total) * 100)); g.score += 2; changed = true; }
+  });
+  if (changed) renderLive();
+}, 1000);
+
+renderLive(); renderTimeline(); renderQueue(); renderRooms(); renderPast(); spark();
+</script>
+</body>
+</html>

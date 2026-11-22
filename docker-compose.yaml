@@ -1,0 +1,14 @@
+services:
+
+  db:
+      image: postgres:latest
+      environment:
+        POSTGRES_USER: bruno
+        POSTGRES_PASSWORD: escape_room
+        POSTGRES_DB: db_escape
+      ports:
+        - "127.0.0.1:5432:5432"
+      volumes:
+        - db_escape_rooms:/var/lib/postgresql
+volumes:
+  db_escape_rooms:

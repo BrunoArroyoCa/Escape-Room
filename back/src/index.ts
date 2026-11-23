@@ -1,5 +1,7 @@
-//Conecction with data base and the CRUD
+import { drizzle } from "drizzle-orm/bun-sql";
+import { relations } from "./db/relations.ts";
+import { authRelations } from "./db/auth-schema.ts";
 
-import { drizzle } from 'drizzle-orm/bun-sql';
-
-export const db = drizzle(process.env.DATABASE_URL!);
+export const db = drizzle(process.env.DATABASE_URL!, {
+  relations: { ...relations, ...authRelations },
+});

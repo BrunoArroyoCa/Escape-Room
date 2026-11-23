@@ -1,4 +1,3 @@
-//Here we are going to create the model and the tables
 
 import {
   pgTable,
@@ -10,6 +9,11 @@ import {
   timestamp,
 } from 'drizzle-orm/pg-core';
 
+import { user } from "../db/auth-schema.ts";
+
+
+
+/* 
 export const userTable = pgTable('user_table', {
   id_user: uuid('id_user').primaryKey().defaultRandom(),
   name: varchar('name', { length: 255 }).notNull(),
@@ -17,6 +21,7 @@ export const userTable = pgTable('user_table', {
   password: varchar('password', { length: 255 }).notNull(),
   rol: varchar('rol', { length: 255 }).notNull(),
 });
+*/
 
 export const mapTable = pgTable('map_table', {
   id_map: uuid('id_map').primaryKey().defaultRandom(),
@@ -46,7 +51,7 @@ export const reservations = pgTable('reservations', {
     .references(() => mapTable.id_map),
   id_user: uuid('id_user')
     .notNull()
-    .references(() => userTable.id_user),
+    .references(() =>  user.id), //userTable.id_user 
   reserve_at: timestamp('reserve_at').notNull(),
   status: varchar('status', { length: 255 }).notNull(),
   team: varchar('team', { length: 255 }),
@@ -59,7 +64,7 @@ export const gameTable = pgTable('game_table', {
     .references(() => reservations.id_reservations),
   id_user: uuid('id_user')
     .notNull()
-    .references(() => userTable.id_user),
+    .references(() => user.id),
   id_map: uuid('id_map')
     .notNull()
     .references(() => mapTable.id_map),

@@ -1,0 +1,108 @@
+.band {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border: var(--hair);
+  background: var(--sheet);
+
+  @media (max-width: 900px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.figure,
+.placeholder {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  min-height: 108px;
+  padding: var(--space-3) var(--space-4);
+  border: 0;
+  border-left: var(--hair);
+  border-radius: 0;
+  background: transparent;
+  text-align: left;
+
+  &:first-child {
+    border-left: 0;
+  }
+
+  @media (max-width: 900px) {
+    &:nth-child(3) {
+      border-left: 0;
+    }
+
+    &:nth-child(n + 3) {
+      border-top: var(--hair);
+    }
+  }
+}
+
+.figure {
+  cursor: pointer;
+  transition: background-color 140ms ease;
+
+  @media (hover: hover) {
+    &:hover {
+      background: color-mix(in oklab, var(--ink) 5%, transparent);
+
+      & .action {
+        opacity: 1;
+      }
+    }
+  }
+
+  &:focus-visible .action {
+    opacity: 1;
+  }
+}
+
+.labelRow {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+/* Marca de dato de ejemplo hasta conectar la API */
+.sample {
+  font-family: var(--font-label);
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--markup);
+}
+
+.value {
+  font-family: var(--font-label);
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+
+.note {
+  font-size: 13px;
+  color: var(--graphite);
+}
+
+.action {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  position: absolute;
+  bottom: var(--space-3);
+  right: var(--space-4);
+  font-family: var(--font-label);
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  opacity: 0;
+  transition: opacity 140ms ease;
+
+  @media (hover: none) {
+    display: none;
+  }
+}

@@ -1,0 +1,328 @@
+.plan {
+  min-width: 0;
+}
+
+/* Muros exteriores macizados; tabiques interiores entre salas */
+.walls {
+  display: grid;
+  grid-template-columns: repeat(var(--rooms, 3), minmax(0, 1fr));
+  border: var(--wall) solid var(--ink);
+  background: var(--sheet);
+
+  @media (max-width: 760px) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.room {
+  --zone: var(--ink);
+  container-type: inline-size;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+  padding: var(--space-4) var(--space-4) var(--space-5);
+  background: color-mix(in oklab, var(--zone) 6%, var(--sheet));
+
+  /* Tabiques interiores: doble línea; el macizado queda solo en los muros exteriores */
+  & + & {
+    border-left: 4px double var(--ink);
+
+    @media (max-width: 760px) {
+      border-left: 0;
+      border-top: 4px double var(--ink);
+    }
+  }
+
+  &[data-closed] {
+    background:
+      repeating-linear-gradient(45deg, var(--rule) 0 1px, transparent 1px 9px),
+      var(--sheet);
+  }
+}
+
+.head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.name {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  align-items: flex-start;
+  gap: var(--space-2);
+  /* Reserva dos líneas para que las tres salas compartan la misma rejilla */
+  min-height: calc(2 * 1.1em);
+  font-family: var(--font-label);
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 1.1;
+
+  @media (max-width: 760px) {
+    min-height: 0;
+  }
+}
+
+.nameText {
+  text-wrap: balance;
+}
+
+/* Número de recinto, como en los planos: recuadro con el código */
+.tag {
+  display: inline-grid;
+  place-items: center;
+  flex-shrink: 0;
+  min-width: 28px;
+  height: 24px;
+  padding: 0 4px;
+  border: var(--hair);
+  background: var(--zone);
+  color: var(--sheet);
+  font-size: 15px;
+  line-height: 1;
+}
+
+.edit {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  height: 30px;
+  padding: 0 var(--space-2);
+  border: var(--hair);
+  border-radius: 0;
+  background: var(--sheet);
+  font-family: var(--font-label);
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+
+  @media (hover: hover) {
+    &:hover {
+      background: var(--ink);
+      color: var(--ground);
+    }
+  }
+}
+
+.game {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 100%;
+  margin: 0;
+  padding: var(--space-3);
+  border: 1px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 140ms ease;
+
+  @media (hover: hover) {
+    &:hover {
+      border-color: var(--ink);
+    }
+  }
+
+  & {
+    margin-inline: calc(-1 * var(--space-3));
+    width: calc(100% + 2 * var(--space-3));
+  }
+}
+
+.team {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+
+  & strong {
+    font-size: 17px;
+    font-weight: 600;
+  }
+
+  & span {
+    font-size: 14px;
+    color: var(--graphite);
+  }
+}
+
+.clockRow {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+}
+
+.clock {
+  position: relative;
+  font-family: var(--font-label);
+  font-weight: 700;
+  font-size: clamp(44px, 4.4vw, 64px);
+  line-height: 0.9;
+  letter-spacing: -0.01em;
+
+  /* Marca en rojo cuando quedan menos de 10 minutos */
+  &[data-urgent] {
+    color: var(--markup);
+    /* El aro se dibuja fuera del flujo para no mover la rejilla de la sala */
+    box-shadow:
+      0 0 0 4px color-mix(in oklab, var(--markup) 0%, var(--sheet)),
+      0 0 0 6px var(--markup);
+  }
+}
+
+.clockNote {
+  font-size: 14px;
+  color: var(--graphite);
+
+  [data-urgent] + & {
+    color: var(--markup);
+    font-weight: 600;
+  }
+}
+
+.gameFoot {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  font-size: 14px;
+  color: var(--graphite);
+
+  & strong {
+    color: var(--ink);
+    font-size: 17px;
+  }
+}
+
+.idle {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.idleState {
+  font-family: var(--font-label);
+  font-weight: 700;
+  font-size: clamp(28px, 2.6vw, 38px);
+  line-height: 1;
+  color: var(--graphite);
+}
+
+.idleNext {
+  margin-bottom: var(--space-2);
+  font-size: 14px;
+  color: var(--graphite);
+
+  & strong {
+    color: var(--ink);
+  }
+}
+
+.legend {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: var(--space-1) var(--space-4);
+  /* Altura fija de dos líneas: la raya queda a la misma altura en todas las salas */
+  min-height: calc(2 * 1.45em + var(--space-1) + var(--space-3));
+  margin-top: auto;
+  padding-top: var(--space-3);
+  border-top: var(--hair-soft);
+  font-size: 13px;
+
+  & div {
+    display: flex;
+    gap: 6px;
+  }
+
+  & dt {
+    color: var(--graphite);
+  }
+
+  & dd {
+    font-weight: 600;
+  }
+}
+
+.sample {
+  /* Sobre la raya de la leyenda, a la derecha, igual en todas las salas */
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 4px);
+  font-family: var(--font-label);
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--markup);
+}
+
+/* Salas estrechas (4 o más en la planta): botón solo con icono y pie apilado */
+@container (max-width: 300px) {
+  .editLabel {
+    display: none;
+  }
+
+  .edit {
+    width: 30px;
+    padding: 0;
+    justify-content: center;
+  }
+
+  .gameFoot {
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .name {
+    font-size: 19px;
+  }
+}
+
+.planFoot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-top: var(--space-3);
+  font-size: 14px;
+  color: var(--graphite);
+}
+
+/* Puerta: hueco en el muro inferior con su abatimiento */
+.door {
+  position: absolute;
+  bottom: calc(-1 * var(--wall));
+  left: 58%;
+  width: 48px;
+  height: 30px;
+  overflow: visible;
+
+  @media (max-width: 760px) {
+    display: none;
+  }
+}
+
+.doorGap {
+  fill: var(--ground);
+}
+
+.doorLeaf {
+  stroke: var(--ink);
+  stroke-width: 1.5;
+}
+
+.doorSwing {
+  fill: none;
+  stroke: var(--graphite);
+  stroke-width: 1;
+  stroke-dasharray: 2 2;
+}

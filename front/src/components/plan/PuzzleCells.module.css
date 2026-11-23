@@ -1,0 +1,68 @@
+.cells {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border: var(--hair);
+}
+
+.cell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 44px;
+  padding: 0 var(--space-2);
+  border-left: var(--hair);
+  isolation: isolate;
+
+  &:first-child {
+    border-left: 0;
+  }
+
+  /* Relleno de zona: sube desde el lado de la puerta (muro inferior) al resolverse */
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--zone);
+    clip-path: inset(100% 0 0 0);
+    transition: clip-path 700ms var(--ease-out);
+  }
+
+  &[data-solved] {
+    color: var(--sheet);
+
+    &::before {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+
+  /* Puzzle en curso: trama diagonal en el color de zona */
+  &[data-current] {
+    background: repeating-linear-gradient(
+      -45deg,
+      color-mix(in oklab, var(--zone) 38%, transparent) 0 1px,
+      transparent 1px 6px
+    );
+  }
+
+  [data-size='sm'] > & {
+    height: 26px;
+    padding: 0 6px;
+  }
+}
+
+.num {
+  font-family: var(--font-label);
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 1;
+
+  [data-size='sm'] & {
+    font-size: 15px;
+  }
+}
+
+.icon {
+  opacity: 0.8;
+}

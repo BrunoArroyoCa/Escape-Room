@@ -27,6 +27,18 @@ export interface User {
   role: UserRole;
 }
 
+/** puzzles_table */
+export interface Puzzle {
+  id_puzzles: string;
+  id_map: string;
+  /** 1 – 4 */
+  index1_4: number;
+  title: string;
+  message: string;
+  solution: string;
+  hint: string | null;
+}
+
 /** reservations */
 export interface Reservation {
   id_reservations: string;
@@ -76,12 +88,6 @@ export interface RoomStats {
   successRate: number;
 }
 
-export interface DailyActivity {
-  /** YYYY-MM-DD */
-  date: string;
-  games: number;
-}
-
 /** GET /admin/dashboard */
 export interface DashboardSummary {
   totalGames: number;
@@ -94,8 +100,36 @@ export interface DashboardSummary {
   slotsToday: number;
   activeGames: number;
   rooms: RoomStats[];
-  last7Days: DailyActivity[];
   todayReservations: ReservationWithDetails[];
+}
+
+/** GET /admin/maps/{id}: sala con sus 4 puzzles */
+export interface MapWithPuzzles extends MapRoom {
+  puzzles: Puzzle[];
+}
+
+/** Lo editable de una sala (PUT /admin/maps/{id}) */
+export type MapUpdate = Partial<Omit<MapRoom, 'id_map'>>;
+
+/** Lo editable de un puzzle (PUT /admin/maps/{id}/puzzles/{index}) */
+export type PuzzleUpdate = Partial<Pick<Puzzle, 'title' | 'message' | 'solution' | 'hint'>>;
+
+/** Lo editable de una reserva (PUT /admin/reservations/{id}) */
+export type ReservationUpdate = Partial<Pick<Reservation, 'reserve_at' | 'id_map' | 'status' | 'team'>>;
+
+/** Sala nueva (POST /admin/maps) con sus 4 puzzles */
+export interface MapCreate extends Omit<MapRoom, 'id_map'> {
+  puzzles: Pick<Puzzle, 'title' | 'message' | 'solution' | 'hint'>[];
+}
+
+/** GET /admin/reservations?from=&to=&status=&map= */
+export interface ReservationsQuery {
+  /** ISO, inclusivo */
+  from?: string;
+  /** ISO, exclusivo */
+  to?: string;
+  status?: ReservationStatus;
+  mapId?: string;
 }
 
 export interface GamesQuery {

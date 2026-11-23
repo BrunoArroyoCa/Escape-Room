@@ -53,7 +53,8 @@ const now = new Date();
 const startOfToday = new Date(now);
 startOfToday.setHours(0, 0, 0, 0);
 
-for (let dayOffset = 29; dayOffset >= 0; dayOffset--) {
+// 30 días de historial, hoy y 7 días de reservas futuras
+for (let dayOffset = 29; dayOffset >= -7; dayOffset--) {
   const day = new Date(startOfToday);
   day.setDate(day.getDate() - dayOffset);
   const isToday = dayOffset === 0;
@@ -172,4 +173,19 @@ for (let i = liveCount; i < 2; i++) {
     ended_at: null,
     status: 'in_progress',
   });
+}
+
+/*
+ * Ejemplo forzado: la partida en curso de la tercera sala está en sus
+ * últimos minutos, para poder ver en desarrollo el aviso rojo de "últimos
+ * minutos" del plano. Con datos reales esto lo decide el reloj de la partida.
+ */
+{
+  const map = mapsExample[2]!;
+  const urgent = gamesExample.find((g) => g.status === 'in_progress' && g.id_map === map.id_map);
+  if (urgent) {
+    urgent.started_at = new Date(now.getTime() - (map.time_limit - 8.5) * 60_000).toISOString();
+    urgent.progress = Math.max(urgent.progress, 75);
+    urgent.score = Math.max(urgent.score, Math.round(map.max_score * 0.55));
+  }
 }

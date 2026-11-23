@@ -1,47 +1,47 @@
-/*
- * Estilos globales. Los colores vienen de src/config/theme.ts
- * (ThemeProvider los inyecta como variables --color-*).
- * Los valores de aquí son solo un fallback antes de hidratar.
- */
+@import './fonts.css';
+
+/* Valores por defecto; ThemeProvider los sobrescribe desde config/theme.ts */
 :root {
-  --color-bg: #0e0d12;
-  --color-surface: #16151c;
-  --color-surface-raised: #1f1d27;
-  --color-border: #2b2935;
-  --color-text: #edeae3;
-  --color-text-muted: #9a94a6;
-  --color-accent: #f2a541;
-  --color-accent-contrast: #1a1206;
-  --color-success: #4fd1a5;
-  --color-warning: #f2c14e;
-  --color-danger: #f2545b;
-  --color-info: #7aa2f7;
-  --color-room-1: #c97e22;
-  --color-room-2: #4c8df0;
-  --color-room-3: #c95bc0;
-  --radius: 14px;
+  --ground: #f2f3f0;
+  --sheet: #fbfbf9;
+  --ink: #1b1f24;
+  --graphite: #62676e;
+  --rule: #c9cbc6;
+  --markup: #c8322a;
+  --zone-1: #00836e;
+  --zone-2: #9e640c;
+  --zone-3: #6e52a0;
+  --zone-extra: #4f555c;
 
-  /* Derivados: se recalculan solos al cambiar de tema */
-  --color-accent-soft: color-mix(in oklab, var(--color-accent) 14%, transparent);
-  --color-accent-line: color-mix(in oklab, var(--color-accent) 45%, transparent);
-  --color-border-strong: color-mix(in oklab, var(--color-text) 18%, var(--color-border));
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-lg: calc(var(--radius) * 1.4);
-  --shadow-popup: 0 18px 50px -12px rgb(0 0 0 / 0.45), 0 0 0 1px var(--color-border);
+  --hair: 1px solid var(--ink);
+  --hair-soft: 1px solid var(--rule);
+  --wall: 6px;
 
-  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --font-display: 'Fraunces', 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
-  --font-mono: ui-monospace, 'JetBrains Mono', SFMono-Regular, Consolas, monospace;
+  --font-ui: 'Barlow', system-ui, sans-serif;
+  --font-label: 'Barlow Condensed', 'Barlow', system-ui, sans-serif;
 
-  color-scheme: dark;
-  font-family: var(--font-sans);
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  color-scheme: light;
+  font-family: var(--font-ui);
   font-size: 15px;
-  line-height: 1.5;
-  color: var(--color-text);
-  background: var(--color-bg);
+  line-height: 1.45;
+  color: var(--ink);
+  background: var(--ground);
+  font-variant-numeric: tabular-nums;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  accent-color: var(--ink);
+  scrollbar-color: var(--graphite) var(--ground);
+  scrollbar-width: thin;
 }
 
 *,
@@ -53,42 +53,52 @@
 body {
   margin: 0;
   min-height: 100dvh;
-  background:
-    radial-gradient(1200px 600px at 85% -10%, var(--color-accent-soft), transparent 60%),
-    var(--color-bg);
-  transition: background-color 300ms ease;
-}
-
-#root {
-  min-height: 100dvh;
-  isolation: isolate;
 }
 
 h1,
 h2,
 h3,
 h4,
-p {
+p,
+dl,
+dd,
+ol,
+ul {
   margin: 0;
 }
 
-button {
+ol,
+ul {
+  padding: 0;
+  list-style: none;
+}
+
+button,
+input,
+select,
+textarea {
   font: inherit;
   color: inherit;
 }
 
+::selection {
+  background: var(--ink);
+  color: var(--ground);
+}
+
 :focus-visible {
-  outline: 2px solid var(--color-accent);
+  outline: 2px solid var(--markup);
   outline-offset: 2px;
 }
 
-::selection {
-  background: var(--color-accent);
-  color: var(--color-accent-contrast);
-}
-
-.tabular {
-  font-variant-numeric: tabular-nums;
+/* Etiqueta de plano: condensada, versal */
+.label {
+  font-family: var(--font-label);
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--graphite);
 }
 
 .sr-only {

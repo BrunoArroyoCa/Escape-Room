@@ -4,5 +4,6 @@
  * y podrá eliminarse sin tocar componentes ni pantallas.
  */
 export { mapsExample } from './maps';
+export { puzzlesExample } from './puzzles';
 export { usersExample, adminExample } from './users';
 export { gamesExample, reservationsExample, SESSION_HOURS } from './gamesAndReservations';

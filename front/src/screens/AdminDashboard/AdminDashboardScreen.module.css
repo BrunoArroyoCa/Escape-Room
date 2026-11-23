@@ -1,0 +1,31 @@
+.screen {
+  min-height: 100dvh;
+}
+
+.sheet {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  max-width: 96rem;
+  margin: 0 auto;
+  padding: var(--space-5) clamp(var(--space-4), 2.5vw, var(--space-6)) var(--space-7);
+}
+
+/* Planta (2/3) y agenda (1/3) */
+.live {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(20rem, 1fr);
+  gap: var(--space-5);
+  align-items: stretch;
+
+  @media (max-width: 1180px) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* En móvil, lo que pasa en las salas va primero; las cifras después */
+@media (max-width: 760px) {
+  .live {
+    order: -1;
+  }
+}

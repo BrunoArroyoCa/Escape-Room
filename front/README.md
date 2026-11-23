@@ -1,6 +1,6 @@
-# Escape Room · Front
+# Escape Room · Front (panel de empresa)
 
-React 19 + Vite + TypeScript, con [Base UI](https://base-ui.com) (componentes) y [Motion](https://motion.dev) (animaciones).
+React 19 + Vite + TypeScript, con [Base UI](https://base-ui.com) para los componentes.
 
 ```bash
 npm install
@@ -9,39 +9,33 @@ npm run build
 npm run lint
 ```
 
+## Un solo panel
+
+Todo el lado empresa vive en una pantalla, dibujada como el plano del local:
+
+- **Cifras**: partidas, puntuación media, ocupación y reservas de hoy. Al pulsar una cifra se abre su prueba (historial filtrado o agenda).
+- **Planta**: las 3 salas con la partida en directo (reloj, 4 puzzles, puntos). Se refresca cada 3 s.
+- **Agenda de hoy**: horario por sesión y sala.
+- **Historial**: partidas finalizadas con filtros de sala, periodo y resultado.
+
+Al pulsar una sala, una reserva o una partida se abre una hoja lateral para editarla o verla, sin cambiar de pantalla.
+
 ## Estructura
 
 ```
 src/
-├── config/          Configuración de la app
-│   ├── theme.ts         ← COLORES: temas, colores por sala, radio. Edita aquí.
-│   ├── ThemeProvider.tsx  vuelca el tema a variables CSS (--color-*)
-│   └── navigation.ts    entradas del menú lateral
-├── screens/         Pantallas (componen componentes, gestionan estado y datos)
-│   └── admin/
-│       ├── DashboardScreen/
-│       └── GamesScreen/
-├── components/      Componentes reutilizables
-│   ├── ui/              wrappers de Base UI personalizados (Button, Select, Tabs, Modal…)
-│   ├── layout/          AdminLayout, Sidebar, Topbar, ThemeMenu
-│   ├── dashboard/       StatCard, WeeklyActivityChart, RoomPerformance, TodayReservations
-│   └── games/           LiveGameCard, GamesHistoryTable, GameDetailDialog, filtros…
-├── services/        Una función por endpoint del back (hoy leen modelsExample)
-├── modelsExample/   Datos de ejemplo para desarrollo (sin backend)
-├── hooks/           useAsync, useLiveGames (polling), useNow
-├── types/           Tipos del dominio (espejo de back/src/db/schema.ts)
-├── utils/           Formateo, colores por sala
-└── styles/          CSS global
+├── config/theme.ts      ← COLORES del panel (edita aquí)
+├── screens/AdminDashboard/   la pantalla única
+├── components/
+│   ├── ui/              Base UI personalizado: Button, SelectField, Segmented, Fields, Sheet, Toasts
+│   ├── plan/            FloorPlan, PuzzleCells (la planta del local)
+│   ├── dashboard/       TitleBlock, FiguresBand, AgendaMatrix, HistorySection
+│   └── sheets/          editores de sala/puzzles y reserva, detalle de partida
+├── services/adminService.ts   una función por endpoint del back
+├── modelsExample/       datos de ejemplo (sin backend)
+├── hooks/  types/  utils/  styles/  assets/fonts/
 ```
-
-## Colores
-
-Todo color sale de `src/config/theme.ts`. Cada clave se convierte en una variable CSS
-(`surfaceRaised` → `--color-surface-raised`) y los componentes solo usan esas variables.
-Para añadir un tema copia uno de `themes`; aparecerá solo en el selector del topbar.
 
 ## Conectar con el back
 
-Las pantallas nunca importan `modelsExample`; solo llaman a `services/adminGamesService.ts`.
-Cuando la API esté lista, sustituye el cuerpo de cada función por su `fetch` (el endpoint está
-documentado encima de cada una) y elimina `modelsExample/`.
+La UI solo llama a `services/adminService.ts`. Hoy trabaja sobre una copia en memoria de `modelsExample` (los cambios se pierden al recargar). Cuando la API exista, sustituye el cuerpo de cada función por su `fetch` (el endpoint está encima de cada una) y elimina `modelsExample/`.

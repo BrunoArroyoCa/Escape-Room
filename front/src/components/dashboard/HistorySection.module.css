@@ -1,0 +1,254 @@
+.section {
+  min-width: 0;
+  border: var(--hair);
+  background: var(--sheet);
+  outline: none;
+  scroll-margin-top: var(--space-5);
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-5);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: var(--hair);
+}
+
+.title {
+  font-family: var(--font-label);
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.totals {
+  display: flex;
+  gap: var(--space-5);
+
+  & div {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+  }
+
+  & dt {
+    font-size: 13px;
+    color: var(--graphite);
+  }
+
+  & dd {
+    font-family: var(--font-label);
+    font-weight: 700;
+    font-size: 20px;
+  }
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  border-bottom: var(--hair);
+}
+
+.range {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.scroller {
+  position: relative;
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  min-width: 52rem;
+
+  /* Móvil: sala, tiempo y puntos pasan a la línea del resultado */
+  @media (max-width: 760px) {
+    min-width: 0;
+
+    & th:nth-child(2),
+    & td:nth-child(2),
+    & th:nth-child(5),
+    & td:nth-child(5),
+    & th:nth-child(6),
+    & td:nth-child(6) {
+      display: none;
+    }
+  }
+  border-collapse: collapse;
+  font-size: 14px;
+
+  & th {
+    padding: var(--space-2) var(--space-3);
+    border-bottom: var(--hair);
+    font-family: var(--font-label);
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    text-align: left;
+    color: var(--graphite);
+  }
+
+  & td {
+    padding: var(--space-2) var(--space-3);
+    border-bottom: var(--hair-soft);
+    vertical-align: middle;
+  }
+
+  &[aria-busy='true'] tbody {
+    opacity: 0.5;
+  }
+}
+
+.row {
+  cursor: pointer;
+  transition: background-color 100ms ease;
+
+  @media (hover: hover) {
+    &:hover {
+      background: color-mix(in oklab, var(--zone) 9%, transparent);
+    }
+  }
+}
+
+.num {
+  text-align: right !important;
+  white-space: nowrap;
+
+  & strong {
+    font-weight: 600;
+  }
+}
+
+.date {
+  white-space: nowrap;
+
+  @media (max-width: 760px) {
+    white-space: normal;
+    width: 6.5rem;
+  }
+}
+
+.room {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  white-space: nowrap;
+
+  & i {
+    width: 9px;
+    height: 9px;
+    background: var(--zone);
+  }
+}
+
+.team {
+  display: block;
+  font-weight: 600;
+}
+
+.player {
+  display: block;
+  font-size: 13px;
+  color: var(--graphite);
+}
+
+.result {
+  font-weight: 500;
+
+  &[data-status='abandoned'] {
+    color: var(--markup);
+  }
+}
+
+.mobileMeta {
+  display: none;
+  margin-top: 2px;
+  font-size: 13px;
+  color: var(--graphite);
+  white-space: nowrap;
+
+  & strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  @media (max-width: 760px) {
+    display: block;
+  }
+}
+
+.teamSwatch {
+  display: none;
+  width: 9px;
+  height: 9px;
+  margin-right: 6px;
+  background: var(--zone);
+
+  @media (max-width: 760px) {
+    display: inline-block;
+  }
+}
+
+.ramp {
+  display: block;
+  width: 72px;
+  height: 4px;
+  margin: 5px 0 0 auto;
+  background: color-mix(in oklab, var(--ink) 8%, transparent);
+
+  & i {
+    display: block;
+    height: 100%;
+    background: var(--zone);
+  }
+}
+
+.open {
+  width: 44px;
+
+  @media (max-width: 760px) {
+    width: 36px;
+    padding-inline: 0 !important;
+  }
+}
+
+.openBtn {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  cursor: pointer;
+
+  .row:hover & {
+    border-color: var(--ink);
+  }
+}
+
+.empty {
+  padding: var(--space-6) var(--space-4);
+  text-align: center;
+  color: var(--graphite);
+}
+
+.more {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  font-size: 14px;
+  color: var(--graphite);
+}

@@ -1,0 +1,179 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.input {
+  width: 100%;
+  min-height: 36px;
+  padding: var(--space-2) var(--space-3);
+  border: var(--hair);
+  border-radius: 0;
+  background: var(--sheet);
+  font-size: 15px;
+  outline: none;
+
+  &::placeholder {
+    color: var(--graphite);
+  }
+
+  &:focus {
+    box-shadow: inset 0 0 0 1px var(--ink);
+  }
+
+  [data-invalid] > & {
+    border-color: var(--markup);
+    box-shadow: inset 0 0 0 1px var(--markup);
+  }
+}
+
+.area {
+  resize: vertical;
+  line-height: 1.4;
+}
+
+.description {
+  font-size: 13px;
+  color: var(--graphite);
+}
+
+.error {
+  font-size: 13px;
+  color: var(--markup);
+
+  &:empty {
+    display: none;
+  }
+}
+
+.number {
+  display: flex;
+  height: 36px;
+  border: var(--hair);
+  background: var(--sheet);
+
+  &:focus-within {
+    box-shadow: inset 0 0 0 1px var(--ink);
+  }
+}
+
+.numberInput {
+  flex: 1;
+  min-width: 0;
+  padding: 0 var(--space-2);
+  border: 0;
+  background: transparent;
+  font-size: 15px;
+  font-weight: 600;
+  text-align: center;
+  outline: none;
+}
+
+.unitLabel {
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.stepper {
+  width: 36px;
+  border: 0;
+  border-left: var(--hair);
+  background: transparent;
+  font-size: 18px;
+  cursor: pointer;
+
+  &:first-child {
+    border-left: 0;
+    border-right: var(--hair);
+  }
+
+  @media (hover: hover) {
+    &:hover:not([data-disabled]) {
+      background: var(--ink);
+      color: var(--ground);
+    }
+  }
+
+  &[data-disabled] {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+}
+
+.switchRow {
+  display: flex;
+}
+
+.switchLabel {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  cursor: pointer;
+
+  & > span {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.switchState {
+  font-weight: 600;
+}
+
+.switch {
+  position: relative;
+  flex-shrink: 0;
+  width: 44px;
+  height: 24px;
+  padding: 2px;
+  border: var(--hair);
+  border-radius: 0;
+  background: var(--sheet);
+  cursor: pointer;
+  transition: background-color 160ms ease;
+
+  &[data-checked] {
+    background: var(--ink);
+  }
+}
+
+.thumb {
+  display: block;
+  width: 18px;
+  height: 18px;
+  background: var(--ink);
+  transition:
+    transform 200ms var(--ease-out),
+    background-color 160ms ease;
+
+  &[data-checked] {
+    transform: translateX(20px);
+    background: var(--ground);
+  }
+}
+
+.date {
+  width: auto;
+  min-width: 10.5rem;
+  height: 36px;
+  min-height: 0;
+  padding-block: 0;
+  font-variant-numeric: tabular-nums;
+
+  /* Icono de calendario dibujado con la línea del panel, no el del navegador */
+  &::-webkit-calendar-picker-indicator {
+    width: 16px;
+    height: 16px;
+    padding: 2px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231B1F24' stroke-width='1.5' stroke-linecap='square'%3E%3Crect x='4' y='5.5' width='16' height='14.5'/%3E%3Cpath d='M4 10h16M8.5 3v4M15.5 3v4'/%3E%3C/svg%3E")
+      center / 16px no-repeat;
+    opacity: 1;
+    cursor: pointer;
+  }
+
+  &::-webkit-calendar-picker-indicator:hover {
+    outline: 1px solid var(--ink);
+  }
+}

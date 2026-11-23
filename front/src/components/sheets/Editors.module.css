@@ -1,0 +1,249 @@
+.editor {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+
+  &:disabled {
+    opacity: 0.55;
+  }
+}
+
+.legend {
+  width: 100%;
+  margin-bottom: var(--space-3);
+  padding-bottom: var(--space-1);
+  border-bottom: var(--hair);
+  font-family: var(--font-label);
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.row3 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-3);
+
+  @media (max-width: 480px) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Puzzles */
+.accordion {
+  border: var(--hair);
+}
+
+.item + .item {
+  border-top: var(--hair);
+}
+
+.itemHead {
+  margin: 0;
+}
+
+.trigger {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-3);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+
+  @media (hover: hover) {
+    &:hover {
+      background: color-mix(in oklab, var(--ink) 5%, transparent);
+    }
+  }
+
+  &[data-panel-open] .chev {
+    transform: rotate(180deg);
+  }
+}
+
+.index {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border: var(--hair);
+  font-family: var(--font-label);
+  font-weight: 700;
+  font-size: 16px;
+  background: var(--zone, transparent);
+  color: var(--sheet);
+}
+
+.itemTitle {
+  flex: 1;
+  min-width: 0;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.changed {
+  font-family: var(--font-label);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--markup);
+}
+
+.chev {
+  flex-shrink: 0;
+  transition: transform 200ms var(--ease-out);
+}
+
+.panel {
+  height: var(--accordion-panel-height);
+  overflow: hidden;
+  transition: height 260ms var(--ease-out);
+
+  &[data-starting-style],
+  &[data-ending-style] {
+    height: 0;
+  }
+}
+
+.panelInner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: 0 var(--space-3) var(--space-4);
+}
+
+/* Acciones */
+.actions {
+  position: sticky;
+  bottom: calc(-1 * var(--space-5));
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  margin: 0 calc(-1 * var(--space-5)) calc(-1 * var(--space-5));
+  padding: var(--space-3) var(--space-5);
+  border-top: var(--hair);
+  background: var(--sheet);
+}
+
+.status {
+  /* El aviso ocupa su propia línea; los botones quedan juntos debajo */
+  flex: 1 1 100%;
+  font-size: 13px;
+  color: var(--graphite);
+
+  @media (min-width: 30rem) {
+    flex: 1 1 0;
+    min-width: 8rem;
+  }
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-top: var(--hair);
+  border-left: var(--hair);
+
+  & > div {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: var(--space-2) var(--space-3);
+    border-right: var(--hair);
+    border-bottom: var(--hair);
+    min-width: 0;
+  }
+
+  & dd {
+    font-weight: 600;
+    overflow-wrap: anywhere;
+
+    & span {
+      display: block;
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--graphite);
+    }
+  }
+}
+
+.score {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  & strong {
+    font-family: var(--font-label);
+    font-weight: 700;
+    font-size: 64px;
+    line-height: 1;
+    letter-spacing: -0.01em;
+
+    & small {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--graphite);
+      letter-spacing: 0;
+    }
+  }
+}
+
+.scoreState {
+  font-weight: 600;
+
+  &[data-status='abandoned'] {
+    color: var(--markup);
+  }
+}
+
+.notice {
+  padding: var(--space-3);
+  border: var(--hair);
+  font-size: 14px;
+}
+
+.warning {
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--markup);
+  color: var(--markup);
+  font-size: 14px;
+}
+
+.danger {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding-top: var(--space-4);
+  border-top: 1px dashed var(--markup);
+
+  & p {
+    font-size: 14px;
+  }
+}
+
+.dangerActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}

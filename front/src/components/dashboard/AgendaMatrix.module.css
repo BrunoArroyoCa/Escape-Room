@@ -1,0 +1,249 @@
+.agenda {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border: var(--hair);
+  background: var(--sheet);
+  outline: none;
+  scroll-margin-top: var(--space-5);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-2) var(--space-2) var(--space-4);
+  border-bottom: var(--hair);
+}
+
+.dayNav {
+  display: flex;
+  border: var(--hair);
+}
+
+.navBtn,
+.todayBtn {
+  display: grid;
+  place-items: center;
+  height: 32px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  cursor: pointer;
+
+  @media (hover: hover) {
+    &:hover:not(:disabled) {
+      background: var(--ink);
+      color: var(--ground);
+    }
+  }
+
+  &:focus-visible {
+    outline-offset: -4px;
+  }
+}
+
+.navBtn {
+  width: 32px;
+}
+
+.todayBtn {
+  padding: 0 var(--space-3);
+  border-inline: var(--hair);
+  font-family: var(--font-label);
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+
+  &:disabled {
+    color: var(--graphite);
+    cursor: default;
+  }
+}
+
+.day {
+  padding: var(--space-3) var(--space-4) 0;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-4) var(--space-3);
+  border-bottom: var(--hair);
+}
+
+.scroller {
+  overflow-x: auto;
+}
+
+.empty {
+  padding: var(--space-3) var(--space-4);
+  font-size: 14px;
+  color: var(--graphite);
+}
+
+.title {
+  font-family: var(--font-label);
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+
+  & th,
+  & td {
+    border-top: var(--hair-soft);
+    border-left: var(--hair-soft);
+    padding: 0;
+    vertical-align: top;
+  }
+
+  & thead th {
+    padding: var(--space-2);
+    border-top: 0;
+    font-family: var(--font-label);
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-align: left;
+  }
+
+
+  /* Línea roja: la sesión en curso */
+  & tr[data-now] > * {
+    border-top: 2px solid var(--markup);
+  }
+}
+
+.hourHead {
+  width: 3.6rem;
+  border-left: 0 !important;
+}
+
+.hour {
+  padding: var(--space-2) !important;
+  border-left: 0 !important;
+  font-family: var(--font-label);
+  font-weight: 700;
+  font-size: 15px;
+  text-align: left;
+  vertical-align: top !important;
+
+  [data-now] > & {
+    color: var(--markup);
+  }
+}
+
+.roomHead {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.swatch {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  margin-right: 6px;
+  background: var(--zone);
+}
+
+.booking {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+  width: 100%;
+  height: 100%;
+  min-height: 52px;
+  padding: var(--space-2);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 120ms ease;
+
+  @media (hover: hover) {
+    &:hover {
+      background: color-mix(in oklab, var(--zone) 14%, transparent);
+    }
+  }
+
+  &:focus-visible {
+    outline-offset: -3px;
+  }
+
+  &[data-status='live'] {
+    background: var(--zone);
+    color: var(--sheet);
+
+    & .state {
+      color: inherit;
+    }
+  }
+
+  &[data-status='pending'] {
+    background: repeating-linear-gradient(
+      -45deg,
+      color-mix(in oklab, var(--zone) 22%, transparent) 0 1px,
+      transparent 1px 6px
+    );
+  }
+
+  &[data-status='cancelled'] .team {
+    text-decoration: line-through;
+    text-decoration-color: var(--markup);
+    color: var(--graphite);
+  }
+
+  &[data-status='cancelled'] .state {
+    color: var(--markup);
+  }
+
+  &[data-past]:not([data-status='live']) .team {
+    color: var(--graphite);
+  }
+}
+
+.team {
+  display: -webkit-box;
+  width: 100%;
+  overflow: hidden;
+  /* Condensada del plano: nombres largos ("Descifradores") caben en columnas estrechas */
+  font-family: var(--font-label);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.15;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+
+  @media (max-width: 760px) {
+    font-size: 15px;
+    -webkit-line-clamp: 3;
+  }
+}
+
+.state {
+  font-size: 12px;
+  color: var(--graphite);
+}
+
+.free {
+  display: block;
+  padding: var(--space-2);
+  font-size: 13px;
+  color: var(--graphite);
+}

@@ -11,14 +11,16 @@ export const formatTime = (iso: string) =>
 export const formatDate = (iso: string) =>
   new Intl.DateTimeFormat(LOCALE, { day: '2-digit', month: 'short' }).format(new Date(iso));
 
+const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+
 export const formatDateTime = (iso: string) =>
-  new Intl.DateTimeFormat(LOCALE, {
+  capitalize(new Intl.DateTimeFormat(LOCALE, {
     weekday: 'short',
     day: '2-digit',
     month: 'short',
     hour: '2-digit',
     minute: '2-digit',
-  }).format(new Date(iso));
+  }).format(new Date(iso)));
 
 export const formatWeekday = (dateKey: string) =>
   new Intl.DateTimeFormat(LOCALE, { weekday: 'short' }).format(new Date(`${dateKey}T12:00:00`));

@@ -1,0 +1,426 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-23T17:46:25+00:00",
+  "title": "Design System: Escape Room",
+  "extensions": {
+    "colorMeta": {
+      "drafting-film": {
+        "role": "neutral",
+        "displayName": "Drafting Film",
+        "canonical": "oklch(96.3% 0.004 122)",
+        "cssVar": "--ground",
+        "tonalRamp": [
+          "oklch(15% 0.002 122)",
+          "oklch(26% 0.002 122)",
+          "oklch(38% 0.003 122)",
+          "oklch(50% 0.004 122)",
+          "oklch(62% 0.004 122)",
+          "oklch(74% 0.003 122)",
+          "oklch(85% 0.002 122)",
+          "oklch(95% 0.002 122)"
+        ],
+        "source": "front/src/config/theme.ts"
+      },
+      "sheet": {
+        "role": "neutral",
+        "displayName": "Sheet",
+        "canonical": "oklch(98.8% 0.003 106)",
+        "cssVar": "--sheet",
+        "tonalRamp": [
+          "oklch(15% 0.002 106)",
+          "oklch(26% 0.002 106)",
+          "oklch(38% 0.002 106)",
+          "oklch(50% 0.003 106)",
+          "oklch(62% 0.003 106)",
+          "oklch(74% 0.002 106)",
+          "oklch(85% 0.002 106)",
+          "oklch(95% 0.002 106)"
+        ],
+        "source": "front/src/config/theme.ts"
+      },
+      "iron-ink": {
+        "role": "primary",
+        "displayName": "Iron Ink",
+        "canonical": "oklch(23.7% 0.011 254)",
+        "cssVar": "--ink",
+        "tonalRamp": [
+          "oklch(15% 0.005 254)",
+          "oklch(26% 0.006 254)",
+          "oklch(38% 0.008 254)",
+          "oklch(50% 0.010 254)",
+          "oklch(62% 0.010 254)",
+          "oklch(74% 0.008 254)",
+          "oklch(85% 0.006 254)",
+          "oklch(95% 0.005 254)"
+        ],
+        "source": "front/src/config/theme.ts"
+      },
+      "graphite": {
+        "role": "neutral",
+        "displayName": "Graphite",
+        "canonical": "oklch(51.2% 0.013 257)",
+        "cssVar": "--graphite",
+        "tonalRamp": [
+          "oklch(15% 0.005 257)",
+          "oklch(26% 0.008 257)",
+          "oklch(38% 0.010 257)",
+          "oklch(50% 0.012 257)",
+          "oklch(62% 0.012 257)",
+          "oklch(74% 0.009 257)",
+          "oklch(85% 0.007 257)",
+          "oklch(95% 0.005 257)"
+        ],
+        "source": "front/src/config/theme.ts"
+      },
+      "rule": {
+        "role": "neutral",
+        "displayName": "Rule",
+        "canonical": "oklch(83.9% 0.007 124)",
+        "cssVar": "--rule",
+        "tonalRamp": [
+          "oklch(15% 0.003 124)",
+          "oklch(26% 0.004 124)",
+          "oklch(38% 0.005 124)",
+          "oklch(50% 0.006 124)",
+          "oklch(62% 0.006 124)",
+          "oklch(74% 0.005 124)",
+          "oklch(85% 0.004 124)",
+          "oklch(95% 0.003 124)"
+        ],
+        "source": "front/src/config/theme.ts"
+      },
+      "markup-red": {
+        "role": "secondary",
+        "displayName": "Markup Red",
+        "canonical": "oklch(55.0% 0.188 28)",
+        "cssVar": "--markup",
+        "tonalRamp": [
+          "oklch(15% 0.079 28)",
+          "oklch(26% 0.109 28)",
+          "oklch(38% 0.142 28)",
+          "oklch(50% 0.174 28)",
+          "oklch(62% 0.169 28)",
+          "oklch(74% 0.136 28)",
+          "oklch(85% 0.106 28)",
+          "oklch(95% 0.079 28)"
+        ],
+        "source": "front/src/config/theme.ts"
+      },
+      "zone-teal": {
+        "role": "tertiary",
+        "displayName": "Zone Teal (room 1)",
+        "canonical": "oklch(54.5% 0.102 176)",
+        "cssVar": "--zone-1",
+        "tonalRamp": [
+          "oklch(15% 0.043 176)",
+          "oklch(26% 0.059 176)",
+          "oklch(38% 0.077 176)",
+          "oklch(50% 0.095 176)",
+          "oklch(62% 0.092 176)",
+          "oklch(74% 0.074 176)",
+          "oklch(85% 0.057 176)",
+          "oklch(95% 0.043 176)"
+        ],
+        "source": "front/src/config/theme.ts"
+      },
+      "zone-ochre": {
+        "role": "tertiary",
+        "displayName": "Zone Ochre (room 2)",
+        "canonical": "oklch(55.4% 0.117 69)",
+        "cssVar": "--zone-2",
+        "tonalRamp": [
+          "oklch(15% 0.049 69)",
+          "oklch(26% 0.068 69)",
+          "oklch(38% 0.088 69)",
+          "oklch(50% 0.108 69)",
+          "oklch(62% 0.105 69)",
+          "oklch(74% 0.085 69)",
+          "oklch(85% 0.066 69)",
+          "oklch(95% 0.049 69)"
+        ],
+        "source": "front/src/config/theme.ts"
+      },
+      "zone-violet": {
+        "role": "tertiary",
+        "displayName": "Zone Violet (room 3)",
+        "canonical": "oklch(50.4% 0.123 298)",
+        "cssVar": "--zone-3",
+        "tonalRamp": [
+          "oklch(15% 0.051 298)",
+          "oklch(26% 0.071 298)",
+          "oklch(38% 0.093 298)",
+          "oklch(50% 0.114 298)",
+          "oklch(62% 0.110 298)",
+          "oklch(74% 0.089 298)",
+          "oklch(85% 0.069 298)",
+          "oklch(95% 0.051 298)"
+        ],
+        "source": "front/src/config/theme.ts"
+      },
+      "zone-extra": {
+        "role": "neutral",
+        "displayName": "Zone Extra (rooms 4+)",
+        "canonical": "oklch(43.5% 0.012 248)",
+        "cssVar": "--zone-extra",
+        "source": "front/src/config/theme.ts extraZone",
+        "note": "Neutral graphite for rooms 4 and later; identity carried by the boxed room number."
+      }
+    },
+    "colorSource": {
+      "file": "front/src/config/theme.ts",
+      "note": "Single place to edit colours. ThemeProvider writes each key to a :root CSS variable (zones[i] -> --zone-{i+1}); global.css holds fallback copies only."
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Live room countdown clock; game score at 64px."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Figures band values."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Room names (22px); side-sheet titles at 28px; brand at 24px."
+      },
+      "section-title": {
+        "displayName": "Section title",
+        "purpose": "Uppercase heads of ruled panels; 16px for editor legends."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Root 15px text; 17px/600 team names; 14px table cells."
+      },
+      "body-sm": {
+        "displayName": "Caption",
+        "purpose": "Notes, secondary lines, descriptions."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Uppercase graphite field, figure and column labels; 11px red Ejemplo flag."
+      },
+      "button": {
+        "displayName": "Button",
+        "purpose": "All button labels."
+      }
+    },
+    "shadows": [
+      {
+        "name": "side-sheet",
+        "value": "-18px 0 40px -24px rgb(27 31 36 / 0.45)",
+        "purpose": "Edit sheet over the drawing, with a 28% ink scrim."
+      },
+      {
+        "name": "popup",
+        "value": "0 10px 24px -12px rgb(27 31 36 / 0.35)",
+        "purpose": "Select listboxes."
+      },
+      {
+        "name": "toast",
+        "value": "0 12px 28px -14px rgb(27 31 36 / 0.6)",
+        "purpose": "Ink toasts."
+      }
+    ],
+    "borders": [
+      {
+        "name": "hair",
+        "value": "1px solid var(--ink)",
+        "purpose": "Primary linework."
+      },
+      {
+        "name": "hair-soft",
+        "value": "1px solid var(--rule)",
+        "purpose": "Inner table and legend separators."
+      },
+      {
+        "name": "wall",
+        "value": "6px solid var(--ink)",
+        "purpose": "Poche: plan outer walls only."
+      },
+      {
+        "name": "partition",
+        "value": "4px double var(--ink)",
+        "purpose": "Between rooms on the plan."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "All movement: sheet slide 320ms, puzzle wipe 700ms, accordion 260ms, switch 200ms, toast 260ms."
+      },
+      {
+        "name": "colour-change",
+        "value": "100-160ms ease",
+        "purpose": "Hover and state colour transitions."
+      },
+      {
+        "name": "sheet-exit",
+        "value": "200ms ease-in",
+        "purpose": "Side sheet leaving."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "0.01ms",
+        "purpose": "All durations under prefers-reduced-motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "narrow",
+        "value": "480px"
+      },
+      {
+        "name": "mobile",
+        "value": "760px"
+      },
+      {
+        "name": "figures-2up",
+        "value": "900px"
+      },
+      {
+        "name": "live-stack",
+        "value": "1180px"
+      },
+      {
+        "name": "max-sheet",
+        "value": "96rem"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Solid Button",
+      "kind": "button",
+      "refersTo": "button-solid",
+      "description": "The one primary action on a sheet (save).",
+      "html": "<button class=\"ds-btn ds-btn-solid\">Guardar cambios</button>",
+      "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:36px;padding:0 16px;border:1px solid var(--ink, #1b1f24);border-radius:0;font-family:'Barlow Condensed','Barlow',system-ui,sans-serif;font-weight:600;font-size:14px;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;transition:background-color 120ms ease,color 120ms ease}.ds-btn:focus-visible{outline:2px solid var(--markup, #c8322a);outline-offset:2px}.ds-btn-solid{background:var(--ink, #1b1f24);color:var(--ground, #f2f3f0)}.ds-btn-solid:hover{background:color-mix(in oklab,var(--ink, #1b1f24) 82%,var(--ground, #f2f3f0))}"
+    },
+    {
+      "name": "Line Button",
+      "kind": "button",
+      "refersTo": "button-line",
+      "description": "Secondary actions; inverts to ink on hover.",
+      "html": "<button class=\"ds-btn ds-btn-line\">Mostrar 25 más</button>",
+      "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:36px;padding:0 16px;border:1px solid var(--ink, #1b1f24);border-radius:0;font-family:'Barlow Condensed','Barlow',system-ui,sans-serif;font-weight:600;font-size:14px;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;transition:background-color 120ms ease,color 120ms ease}.ds-btn:focus-visible{outline:2px solid var(--markup, #c8322a);outline-offset:2px}.ds-btn-line{background:transparent;color:var(--ink, #1b1f24)}.ds-btn-line:hover{background:var(--ink, #1b1f24);color:var(--ground, #f2f3f0)}"
+    },
+    {
+      "name": "Markup Button",
+      "kind": "button",
+      "refersTo": "button-markup",
+      "description": "Cancel and destructive actions only, in markup red.",
+      "html": "<button class=\"ds-btn ds-btn-markup\">Cancelar reserva</button>",
+      "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:36px;padding:0 16px;border:1px solid var(--ink, #1b1f24);border-radius:0;font-family:'Barlow Condensed','Barlow',system-ui,sans-serif;font-weight:600;font-size:14px;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;transition:background-color 120ms ease,color 120ms ease}.ds-btn:focus-visible{outline:2px solid var(--markup, #c8322a);outline-offset:2px}.ds-btn-markup{background:transparent;border-color:var(--markup, #c8322a);color:var(--markup, #c8322a)}.ds-btn-markup:hover{background:var(--markup, #c8322a);color:var(--sheet, #fbfbf9)}"
+    },
+    {
+      "name": "Text Field",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Ruled square field; focus doubles the rule, error turns it red.",
+      "html": "<label class=\"ds-field\"><span class=\"ds-label\">Nombre de la sala</span><input class=\"ds-input\" value=\"La Cripta del Alquimista\"></label>",
+      "css": ".ds-field{display:flex;flex-direction:column;gap:4px;font-family:'Barlow',system-ui,sans-serif}.ds-label{font-family:'Barlow Condensed','Barlow',system-ui,sans-serif;font-weight:600;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--graphite, #62676e)}.ds-input{min-height:36px;padding:8px 12px;border:1px solid var(--ink, #1b1f24);border-radius:0;background:var(--sheet, #fbfbf9);color:var(--ink, #1b1f24);font:inherit;font-size:15px;outline:none}.ds-input:focus{box-shadow:inset 0 0 0 1px var(--ink, #1b1f24)}"
+    },
+    {
+      "name": "Segmented Filter",
+      "kind": "chip",
+      "refersTo": "segmented-item",
+      "description": "Ruled group of options sharing 1px dividers; pressed item inverts to ink.",
+      "html": "<div class=\"ds-seg\"><button>Hoy</button><button>7 días</button><button aria-pressed=\"true\">30 días</button><button>Todo</button></div>",
+      "css": ".ds-seg{display:inline-flex;border:1px solid var(--ink, #1b1f24);font-family:'Barlow',system-ui,sans-serif}.ds-seg button{height:34px;padding:0 12px;border:0;border-left:1px solid var(--ink, #1b1f24);background:transparent;color:var(--ink, #1b1f24);font:inherit;font-size:14px;font-weight:500;cursor:pointer;transition:background-color 120ms ease,color 120ms ease}.ds-seg button:first-child{border-left:0}.ds-seg button:hover:not([aria-pressed=true]){background:color-mix(in oklab,var(--ink, #1b1f24) 7%,transparent)}.ds-seg button[aria-pressed=true]{background:var(--ink, #1b1f24);color:var(--ground, #f2f3f0)}.ds-seg button:focus-visible{outline:2px solid var(--markup, #c8322a);outline-offset:-4px}"
+    },
+    {
+      "name": "Title Block",
+      "kind": "nav",
+      "refersTo": "title-block",
+      "description": "Drawing title block that replaces sidebar and topbar.",
+      "html": "<header class=\"ds-tb\"><div class=\"ds-tb-brand\"><b>Escape Room</b><span>Panel de empresa</span></div><div class=\"ds-tb-draw\">Planta del local · 3 salas</div><dl class=\"ds-tb-cell\"><dt>Hora</dt><dd>18:43:34</dd></dl><dl class=\"ds-tb-cell ds-tb-data\"><dt>Datos</dt><dd>De ejemplo</dd></dl></header>",
+      "css": ".ds-tb{display:flex;border:1px solid var(--ink, #1b1f24);background:var(--sheet, #fbfbf9);color:var(--ink, #1b1f24);font-family:'Barlow',system-ui,sans-serif;font-variant-numeric:tabular-nums}.ds-tb-brand{display:flex;flex-direction:column;padding:8px 24px;border-right:1px solid var(--ink, #1b1f24)}.ds-tb-brand b{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:24px;line-height:1}.ds-tb-brand span{font-size:13px;color:var(--graphite, #62676e)}.ds-tb-draw{flex:1;padding:8px 16px;align-self:center;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;letter-spacing:.04em;text-transform:uppercase}.ds-tb-cell{margin:0;padding:8px 16px;border-left:1px solid var(--ink, #1b1f24)}.ds-tb-cell dt{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--graphite, #62676e)}.ds-tb-cell dd{margin:0;font-weight:600;font-size:15px}.ds-tb-data dd{color:var(--markup, #c8322a)}"
+    },
+    {
+      "name": "Room Enclosure",
+      "kind": "card",
+      "refersTo": "room-tag",
+      "description": "One room of the floor plan: zone-tinted enclosure in a 6px poché wall, boxed room tag, condensed countdown.",
+      "html": "<div class=\"ds-room\"><div class=\"ds-room-head\"><span class=\"ds-room-tag\">01</span><b>La Cripta del Alquimista</b></div><div class=\"ds-room-team\"><strong>Las Llaves Perdidas</strong><span>Renata Molina</span></div><div class=\"ds-room-clock\">21:52</div></div>",
+      "css": ".ds-room{--zone:var(--zone-1, #00836e);display:flex;flex-direction:column;gap:16px;max-width:18rem;padding:16px 16px 24px;border:6px solid var(--ink, #1b1f24);background:color-mix(in oklab,var(--zone) 6%,var(--sheet, #fbfbf9));color:var(--ink, #1b1f24);font-family:'Barlow',system-ui,sans-serif;font-variant-numeric:tabular-nums}.ds-room-head{display:flex;gap:8px;align-items:flex-start;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:22px;line-height:1.1}.ds-room-tag{display:inline-grid;place-items:center;min-width:28px;height:24px;padding:0 4px;border:1px solid var(--ink, #1b1f24);background:var(--zone);color:var(--sheet, #fbfbf9);font-size:15px;line-height:1}.ds-room-team{display:flex;flex-direction:column;line-height:1.25}.ds-room-team strong{font-size:17px;font-weight:600}.ds-room-team span{font-size:14px;color:var(--graphite, #62676e)}.ds-room-clock{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:56px;line-height:.9;letter-spacing:-.01em}"
+    },
+    {
+      "name": "Puzzle Cells",
+      "kind": "custom",
+      "refersTo": "puzzle-cell-solved",
+      "description": "Four ruled cells; solved fills with the zone by a wipe from the door side, current is hatched.",
+      "html": "<div class=\"ds-cells\"><div class=\"ds-cell\" data-solved>1</div><div class=\"ds-cell\" data-solved>2</div><div class=\"ds-cell\" data-current>3</div><div class=\"ds-cell\">4</div></div>",
+      "css": ".ds-cells{--zone:var(--zone-1, #00836e);display:grid;grid-template-columns:repeat(4,1fr);max-width:18rem;border:1px solid var(--ink, #1b1f24);background:var(--sheet, #fbfbf9);color:var(--ink, #1b1f24)}.ds-cell{position:relative;isolation:isolate;display:flex;align-items:center;height:44px;padding:0 8px;border-left:1px solid var(--ink, #1b1f24);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:20px}.ds-cell:first-child{border-left:0}.ds-cell::before{content:'';position:absolute;inset:0;z-index:-1;background:var(--zone);clip-path:inset(100% 0 0 0);transition:clip-path 700ms cubic-bezier(.16,1,.3,1)}.ds-cell[data-solved]{color:var(--sheet, #fbfbf9)}.ds-cell[data-solved]::before{clip-path:inset(0 0 0 0)}.ds-cell[data-current]{background:repeating-linear-gradient(-45deg,color-mix(in oklab,var(--zone) 38%,transparent) 0 1px,transparent 1px 6px)}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Plan Sheet",
+    "overview": "The panel is a single architectural drawing of the venue. The three rooms are enclosures on one sheet of drafting film, walled in solid ink, separated by double-line partitions, each with a door swing cut into its bottom wall; the live state of each game is drawn inside its room. Everything around the plan is a part of the same drawing set: a title block across the top (name, drawing title, sheet number, date, live clock), a ruled band of figures, a timetable matrix for today's agenda, and a ruled schedule (the history table) below. Editing happens on a side sheet laid over the drawing, never on another page.\n\nThe material is paper and ink: a cool off-white ground (never cream), iron-ink linework at one device pixel, square corners everywhere, graphite for secondary text and one red reserved for markups. Colour beyond that comes only from the three room zoning colours, which tint each enclosure faintly and fill solid where something is done or happening. Density is that of a working drawing: compact, ruled, legible at a glance from the front desk, with depth one click away.\n\nThe colour values live in one place: `front/src/config/theme.ts`. `ThemeProvider` writes each key to a CSS custom property on `:root` at boot (`graphite` becomes `--graphite`, `zones[i]` becomes `--zone-{i+1}`); `front/src/styles/global.css` only carries fallback copies of the same values. To change a colour, edit `theme.ts` and nothing else.",
+    "keyCharacteristics": [
+      "One sheet: the floor plan, agenda, figures and history read as a single drawing set, not a grid of cards.",
+      "One-pixel ink rules as the primary structure; solid ink (poché) only on the plan's outer walls.",
+      "Square corners on every element, without exception.",
+      "Three ink values (ink, graphite, rule) plus one markup red; zoning colour is the only other hue.",
+      "Condensed, tabular numerals for every figure, clock and score.",
+      "Example data is flagged in red (\"Ejemplo\", \"De ejemplo\") until the API is connected."
+    ],
+    "rules": [
+      {
+        "name": "The Red Pen Rule",
+        "body": "Markup red appears only where something needs attention or would be undone: alert, urgency, cancellation, abandonment, invalid input, focus, example-data flags. It is never decoration, never a brand accent, never a hover colour for neutral actions.",
+        "section": "colors"
+      },
+      {
+        "name": "The Zones Belong to Rooms Rule",
+        "body": "A zoning colour may only appear in connection with its own room. No zone colour is used for generic UI state, charts unrelated to a room, or emphasis. When `theme.ts` zones change, keep text on them at 4.5:1 or better with `sheet` and keep the three clearly distinct.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Source Rule",
+        "body": "Colours are edited in `front/src/config/theme.ts` only. Components reference the CSS variables (`var(--ink)`, `var(--zone)`), never literal hex values; the only literal colour in component CSS is `rgb(27 31 36 / alpha)` for overlay shadows and the backdrop scrim.",
+        "section": "colors"
+      },
+      {
+        "name": "The Tabular Rule",
+        "body": "`font-variant-numeric: tabular-nums` is set on `:root`; every number in the panel is tabular so clocks, scores and times do not jitter as they change.",
+        "section": "typography"
+      },
+      {
+        "name": "The Fixed Ramp Rule",
+        "body": "Sizes are fixed steps (11, 12, 13, 14, 15, 16, 17, 18, 20, 22, 24, 28, 40, 64), not fluid, with the room clock as the single clamp. Scores and figures keep their sizes across contexts so the same kind of number always reads at the same scale.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat Drawing Rule",
+        "body": "Nothing on the sheet casts a shadow. A shadow means \"this is lying on top of the drawing and will go away\".",
+        "section": "elevation"
+      },
+      {
+        "name": "The Poché Rule",
+        "body": "Solid ink mass is reserved for the plan's outer walls (`--wall`, 6px). Partitions between rooms are double lines; every other boundary is a 1px rule.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do edit colours in `front/src/config/theme.ts` and reference them as CSS variables (`var(--ink)`, `var(--zone)`) in components.",
+      "Do draw structure with 1px rules (`--hair`, `--hair-soft`) and shared borders between adjacent cells.",
+      "Do keep every corner square (0px).",
+      "Do set numbers in Barlow Condensed with tabular figures, at the fixed sizes of the type ramp.",
+      "Do pass a room's colour as `--zone` and use it only for that room: 6% tint, solid fill, hatch, swatch.",
+      "Do flag example data with the red \"Ejemplo\" marker until the API is connected.",
+      "Do open detail and editing in the side sheet over the plan instead of navigating away.",
+      "Do gate hover styles behind `@media (hover: hover)`."
+    ],
+    "donts": [
+      "Don't use rounded corners, pills or chips anywhere.",
+      "Don't cast shadows on anything that sits on the drawing; shadows are for the side sheet, popups and toasts only.",
+      "Don't use solid ink mass except for the plan's outer walls.",
+      "Don't use markup red for decoration, branding or neutral emphasis.",
+      "Don't use a zoning colour outside its own room's context.",
+      "Don't add a sidebar, KPI card grid or card grid of live games; the plan and the ruled band replace them.",
+      "Don't use a cream or warm ground; the film is cool off-white.",
+      "Don't hard-code hex values in component CSS."
+    ]
+  }
+}

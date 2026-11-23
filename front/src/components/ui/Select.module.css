@@ -1,0 +1,123 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.label {
+  font-size: 0.75rem;
+  font-weight: 560;
+  color: var(--color-text-muted);
+  letter-spacing: 0.02em;
+}
+
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-width: 13rem;
+  height: 2.375rem;
+  padding: 0 0.65rem 0 0.8rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-raised);
+  color: var(--color-text);
+  font: inherit;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+
+  @media (hover: hover) {
+    &:hover {
+      border-color: var(--color-border-strong);
+    }
+  }
+
+  &[data-popup-open] {
+    border-color: var(--color-accent-line);
+    box-shadow: 0 0 0 3px var(--color-accent-soft);
+  }
+}
+
+.value {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.icon {
+  display: flex;
+  color: var(--color-text-muted);
+  transition: transform 200ms ease;
+
+  [data-popup-open] > & {
+    transform: rotate(180deg);
+  }
+}
+
+.positioner {
+  z-index: 50;
+  outline: none;
+}
+
+.popup {
+  min-width: var(--anchor-width);
+  padding: 0.3rem;
+  border-radius: var(--radius);
+  background: var(--color-surface-raised);
+  box-shadow: var(--shadow-popup);
+  transform-origin: var(--transform-origin);
+  transition:
+    opacity 160ms ease,
+    transform 200ms cubic-bezier(0.22, 1, 0.36, 1);
+  outline: none;
+
+  &[data-starting-style],
+  &[data-ending-style] {
+    opacity: 0;
+    transform: scale(0.96) translateY(-4px);
+  }
+}
+
+.list {
+  max-height: var(--available-height);
+  overflow-y: auto;
+  outline: none;
+}
+
+.item {
+  display: grid;
+  grid-template-columns: auto 1fr 1rem;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.55rem 0.6rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  cursor: default;
+  outline: none;
+  user-select: none;
+  transition: background-color 120ms ease;
+
+  &[data-highlighted] {
+    background: var(--color-accent-soft);
+  }
+
+  &[data-selected] {
+    font-weight: 600;
+  }
+}
+
+.itemLeading {
+  display: inline-flex;
+}
+
+.indicator {
+  display: flex;
+  color: var(--color-accent);
+}

@@ -1,0 +1,28 @@
+.root {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  flex-shrink: 0;
+
+  & > svg {
+    position: absolute;
+    inset: 0;
+  }
+}
+
+.track {
+  fill: none;
+  stroke: color-mix(in oklab, var(--color-text) 8%, transparent);
+}
+
+.indicator {
+  fill: none;
+  stroke: var(--color-accent);
+  stroke-linecap: round;
+}
+
+.value {
+  position: relative;
+  font-size: 1.05rem;
+  font-weight: 680;
+}

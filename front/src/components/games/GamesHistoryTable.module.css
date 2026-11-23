@@ -1,0 +1,137 @@
+.table {
+  width: 100%;
+  min-width: 46rem;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.85rem;
+
+  & th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    padding: 0.7rem 0.9rem;
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+    font-size: 0.72rem;
+    font-weight: 620;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-align: left;
+    color: var(--color-text-muted);
+  }
+
+  & td {
+    padding: 0.75rem 0.9rem;
+    border-bottom: 1px solid color-mix(in oklab, var(--color-border) 60%, transparent);
+    vertical-align: middle;
+  }
+}
+
+.row {
+  cursor: pointer;
+  outline: none;
+  transition: background-color 140ms ease;
+
+  & td:first-child {
+    box-shadow: inset 3px 0 0 transparent;
+    transition: box-shadow 160ms ease;
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      background: var(--color-surface-raised);
+
+      & td:first-child {
+        box-shadow: inset 3px 0 0 var(--room);
+      }
+
+      & .chevron {
+        color: var(--color-text);
+        transform: translateX(2px);
+      }
+    }
+  }
+
+  &:focus-visible {
+    background: var(--color-surface-raised);
+
+    & td:first-child {
+      box-shadow: inset 3px 0 0 var(--color-accent);
+    }
+  }
+}
+
+.num {
+  text-align: right !important;
+  white-space: nowrap;
+}
+
+.date {
+  white-space: nowrap;
+  color: var(--color-text-muted);
+  text-transform: capitalize;
+}
+
+.room {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+
+.swatch {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 2px;
+  background: var(--room);
+}
+
+.team {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.3;
+
+  & strong {
+    font-weight: 580;
+  }
+
+  & span {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+  }
+}
+
+.sub {
+  display: block;
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+}
+
+.score {
+  font-weight: 650;
+}
+
+.scoreBar {
+  display: block;
+  width: 4.5rem;
+  height: 3px;
+  margin: 0.35rem 0 0 auto;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--color-text) 8%, transparent);
+  overflow: hidden;
+
+  & span {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: var(--room);
+  }
+}
+
+.chevron {
+  width: 1.5rem;
+  color: var(--color-text-muted);
+  transition:
+    color 140ms ease,
+    transform 160ms ease;
+}

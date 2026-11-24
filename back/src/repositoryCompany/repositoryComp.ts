@@ -220,21 +220,19 @@ export async function partidasEnCurso() {
   return result;
 }
 
-//Contar el historial de partidas de una sala para no que este prohibido borrala por el historial
+//Comprobar si una sala se puede borrar: no puede tener partidas ni reservas (claves foráneas)
+//Devuelve true si se puede borrar
 export async function checkDeSalaHistorial(id: string) {
-  const result = await db
-    .select({
-      countPartidas: count(gameTable.id_game),
-    })
+  const [partidas] = await db
+    .select({ total: count() })
     .from(gameTable)
-    .innerJoin(
-      reservations,
-      eq(reservations.id_reservations, gameTable.id_reservations),
-    )
-    .innerJoin(mapTable, eq(gameTable.id_map, mapTable.id_map))
-    .where(eq(mapTable.id_map, id));
+    .where(eq(gameTable.id_map, id));
+  const [reservas] = await db
+    .select({ total: count() })
+    .from(reservations)
+    .where(eq(reservations.id_map, id));
 
-  return result[0]?.countPartidas === 0;
+  return (partidas?.total ?? 0) === 0 && (reservas?.total ?? 0) === 0;
 }
 
 export async function totalPartidas() {
@@ -270,7 +268,14 @@ export async function estadisticasPorSala() {
     .groupBy(gameTable.id_map);
 }
 
-//Listar los puzzles por id del mapa TODO
+//Una sala por id con sus 4 puzzles ordenados
+export async function salaConPuzzles(id: string) {
+  const result = await db.query.mapTable.findFirst({
+    where: { id_map: id },
+    with: { puzzles: { orderBy: { index1_4: "asc" } } },
+  });
+  return result ?? null;
+}
 
 // Una reserva por id, con sala y usuario, para el editor de reservas.
 // TODO
@@ -281,43 +286,62 @@ export async function estadisticasPorSala() {
 
 //------------------------------------------------------------ METODOS DE DESTRUCCION ----------------------------------------------------------\\
 
-//Crear un mapa nuevo que es crear una sala nnueva
-//
-// FALTA LOS PUZZLES hacerlo de forma atomica en una misma querie
-//
-export async function crearMapa(edit: MapModel) {
-  const result = await db
-    .insert(mapTable)
-    .values({
-      name: edit.name,
-      difficulty: edit.difficulty,
-      max_score: edit.max_score,
-      time_limit: edit.time_limit,
-      is_active: edit.is_active,
-    })
-    .returning();
-  return result;
+//Lo editable de un puzzle
+type PuzzleInput = {
+  title: string;
+  message: string;
+  solution: string;
+  hint: string | null;
+};
+
+//Crear un mapa nuevo (una sala) con sus 4 puzzles, todo en una transacción
+export async function crearMapa(edit: MapModel, puzzles: PuzzleInput[]) {
+  return await db.transaction(async (tx) => {
+    const [mapa] = await tx
+      .insert(mapTable)
+      .values({
+        name: edit.name,
+        difficulty: edit.difficulty,
+        max_score: edit.max_score,
+        time_limit: edit.time_limit,
+        is_active: edit.is_active,
+      })
+      .returning();
+    const nuevosPuzzles = await tx
+      .insert(puzzlesTable)
+      .values(
+        puzzles.map((p, i) => ({ ...p, id_map: mapa!.id_map, index1_4: i + 1 })),
+      )
+      .returning();
+    return { map: mapa, puzzles: nuevosPuzzles };
+  });
 }
 
-//Editar un mapa TODO usar Partial <>
-export async function editMapa(edit: MapModel, id: string) {
+//Editar un mapa (solo los campos que llegan)
+export async function editMapa(edit: Partial<MapModel>, id: string) {
   const result = await db
     .update(mapTable)
-    .set({
-      name: edit.name,
-      difficulty: edit.difficulty,
-      max_score: edit.max_score,
-      time_limit: edit.time_limit,
-      is_active: edit.is_active,
-    })
+    .set(edit)
     .where(eq(mapTable.id_map, id))
     .returning();
   return result;
 }
 
-//
-//Editar los puzles TODO
-//
+//Editar un puzzle de una sala por su posición (1-4)
+export async function editarPuzzle(
+  idMap: string,
+  index: number,
+  edit: Partial<PuzzleInput>,
+) {
+  const result = await db
+    .update(puzzlesTable)
+    .set(edit)
+    .where(
+      and(eq(puzzlesTable.id_map, idMap), eq(puzzlesTable.index1_4, index)),
+    )
+    .returning();
+  return result;
+}
 
 //re organizar o modificar una reservacion
 //
@@ -354,6 +378,11 @@ export async function eliminarReservacion(id: string) {
 
 //Elimianr una sala o sea un mapa junto a sus puzzles
 export async function eliminarMapaPuzzles(id: string) {
+  if (!(await checkDeSalaHistorial(id))) {
+    throw new Error(
+      "La sala tiene partidas o reservas; ciérrala en lugar de eliminarla.",
+    );
+  }
   return await db.transaction(async (txt) => {
     const deletePuzzles = await txt
       .delete(puzzlesTable)

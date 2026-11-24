@@ -82,18 +82,18 @@ Leyenda de prioridad:
 | `PUT /admin/maps/{id}/puzzles/{index}` | editar puzzle |
 | `DELETE /admin/maps/{id}` | `checkDeSalaHistorial` + `eliminarMapaPuzzles` |
 
-- [ ] **P1 · Sala por id con sus 4 puzzles** ordenados por `index1_4`:
+- [x] **P1 · Sala por id con sus 4 puzzles** ordenados por `index1_4`:
   - `db.query.mapTable.findFirst({ where: { id_map: id }, with: { puzzles: true } })`.
-- [ ] **P1 · `crearMapa` con los 4 puzzles en una transacción.**
+- [x] **P1 · `crearMapa` con los 4 puzzles en una transacción.**
   - Insertar el mapa, coger el `id_map` del `returning()` e insertar los puzzles con `index1_4` 1–4.
   - Mismo patrón que `eliminarMapaPuzzles`.
-- [ ] **P1 · Editar puzzle:**
+- [x] **P1 · Editar puzzle:**
   - `update(puzzlesTable).set({ title, message, solution, hint })`;
   - `where(and(eq(puzzlesTable.id_map, idMap), eq(puzzlesTable.index1_4, index)))`.
-- [ ] **P1 · `checkDeSalaHistorial`: contar también las reservas** de la sala, porque su clave foránea también impide borrarla.
+- [x] **P1 · `checkDeSalaHistorial`: contar también las reservas** de la sala, porque su clave foránea también impide borrarla.
   - Quitar los `innerJoin` innecesarios: basta `where(eq(gameTable.id_map, id))`.
-- [ ] **P1 · `eliminarMapaPuzzles`: llamar antes a `checkDeSalaHistorial`** (aquí o en el service) y devolver un error claro en vez del error de clave foránea.
-- [ ] **P2 · `editMapa`:** recibir `Partial<MapModel>`, porque el front solo manda lo que cambia.
+- [x] **P1 · `eliminarMapaPuzzles`: llamar antes a `checkDeSalaHistorial`** (aquí o en el service) y devolver un error claro en vez del error de clave foránea.
+- [x] **P2 · `editMapa`:** recibir `Partial<MapModel>`, porque el front solo manda lo que cambia.
 
 ## 3. Agenda de reservas
 

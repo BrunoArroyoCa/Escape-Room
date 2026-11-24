@@ -277,12 +277,82 @@ export async function salaConPuzzles(id: string) {
   return result ?? null;
 }
 
-// Una reserva por id, con sala y usuario, para el editor de reservas.
-// TODO
+//Filtros de la agenda (todos opcionales). from inclusivo, to exclusivo
+export interface ReservasFilters {
+  from?: Date;
+  to?: Date;
+  status?: string;
+  mapId?: string;
+}
 
-//Comprobar si hay hueco en un horario si hay otra reserva en la misma sala con reserved_at que no este cancelada (si esta cancelada ponerla como si se puede mover)
-// Comprobar si un hueco está ocupado: otra reserva en la misma sala y a la misma reserve_at, que no esté cancelada y con un id distinto de la que estás editando.
-// TODO
+//Listar las reservas con filtros, con su sala y usuario, ordenadas por hora
+export async function listarReservas(filters: ReservasFilters = {}) {
+  const { from, to, status, mapId } = filters;
+  return await db
+    .select({
+      id_reserv: reservations.id_reservations,
+      id_map: mapTable.id_map,
+      nameMap: mapTable.name,
+      id_user: user.id,
+      nameUser: user.name,
+      reservedAt: reservations.reserve_at,
+      status: reservations.status,
+      team: reservations.team,
+    })
+    .from(reservations)
+    .innerJoin(user, eq(reservations.id_user, user.id))
+    .innerJoin(mapTable, eq(reservations.id_map, mapTable.id_map))
+    .where(
+      and(
+        from ? gte(reservations.reserve_at, from) : undefined,
+        to ? lt(reservations.reserve_at, to) : undefined,
+        status ? eq(reservations.status, status) : undefined,
+        mapId ? eq(reservations.id_map, mapId) : undefined,
+      ),
+    )
+    .orderBy(reservations.reserve_at);
+}
+
+//Una reserva por id, con sala y usuario, para el editor de reservas
+export async function reservaPorId(id: string) {
+  const [result] = await db
+    .select({
+      id_reserv: reservations.id_reservations,
+      id_map: mapTable.id_map,
+      nameMap: mapTable.name,
+      id_user: user.id,
+      nameUser: user.name,
+      reservedAt: reservations.reserve_at,
+      status: reservations.status,
+      team: reservations.team,
+    })
+    .from(reservations)
+    .innerJoin(user, eq(reservations.id_user, user.id))
+    .innerJoin(mapTable, eq(reservations.id_map, mapTable.id_map))
+    .where(eq(reservations.id_reservations, id));
+  return result ?? null;
+}
+
+//Comprobar si un hueco está ocupado: otra reserva no cancelada en la misma sala y hora
+//(sin contar la reserva que se está editando). Devuelve true si está ocupado
+export async function huecoOcupado(
+  idMap: string,
+  reserveAt: Date,
+  idReservaEditada: string,
+) {
+  const [result] = await db
+    .select({ total: count() })
+    .from(reservations)
+    .where(
+      and(
+        eq(reservations.id_map, idMap),
+        eq(reservations.reserve_at, reserveAt),
+        ne(reservations.status, RESERVAS.cancelled),
+        ne(reservations.id_reservations, idReservaEditada),
+      ),
+    );
+  return (result?.total ?? 0) > 0;
+}
 
 //------------------------------------------------------------ METODOS DE DESTRUCCION ----------------------------------------------------------\\
 
@@ -343,22 +413,14 @@ export async function editarPuzzle(
   return result;
 }
 
-//re organizar o modificar una reservacion
-//
-//  Tal vez utilziar PARTIAL<> TODO
-//
+//re organizar o modificar una reservacion (solo los campos que llegan)
 export async function actualizarReservacion(
-  reserv: ReservationModel,
+  reserv: Partial<Omit<ReservationModel, "team">> & { team?: string | null },
   id: string,
 ) {
   const result = await db
     .update(reservations)
-    .set({
-      reserve_at: reserv.reserve_at,
-      id_map: reserv.id_map,
-      status: reserv.status,
-      team: reserv.team,
-    })
+    .set(reserv)
     .where(eq(reservations.id_reservations, id))
     .returning();
   return result;

@@ -104,16 +104,16 @@ Leyenda de prioridad:
 | `PUT /admin/reservations/{id}` | `actualizarReservacion` + comprobar hueco |
 | `DELETE /admin/reservations/{id}` | `eliminarReservacion` (cancela) |
 
-- [ ] **P1 · Listar reservas con filtros opcionales** `from`, `to`, `status` y `mapId`.
+- [x] **P1 · Listar reservas con filtros opcionales** `from`, `to`, `status` y `mapId`.
   - Joins a sala (`id_map`, `name`) y usuario (`id`, `name`), `orderBy(reservations.reserve_at)`.
   - Puede ser la versión general de `countReservationNow`: el dashboard la llama con hoy y la agenda con cualquier día.
-- [ ] **P1 · Reserva por id** con sala y usuario (para el editor de reservas).
-- [ ] **P1 · Comprobar si el hueco está ocupado:** otra reserva con el mismo `id_map` y `reserve_at`, `status ≠ cancelled` e `id ≠` la que se edita.
-- [ ] **P2 · `actualizarReservacion`:** recibir `Partial<ReservationModel>` (el front puede mandar `team: null`).
+- [x] **P1 · Reserva por id** con sala y usuario (para el editor de reservas).
+- [x] **P1 · Comprobar si el hueco está ocupado:** otra reserva con el mismo `id_map` y `reserve_at`, `status ≠ cancelled` e `id ≠` la que se edita.
+- [x] **P2 · `actualizarReservacion`:** recibir `Partial<ReservationModel>` (el front puede mandar `team: null`).
 
 ## 4. Opcional
 
-- [ ] **P2 · `GET /admin/users`:** listar usuarios (`id`, `name`, `email`, `role`).
+- [ ] **P2 · `GET /admin/users`:** listar usuarios (`id`, `name`, `email`, `role`). Pendiente por hacer despues. 
 
 ## 5. Después de las queries
 

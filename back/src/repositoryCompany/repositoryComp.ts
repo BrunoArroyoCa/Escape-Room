@@ -4,11 +4,24 @@ import {
   mapTable,
   puzzlesTable,
 } from "../../src/db/schema.ts";
-import { and, avg, count, desc, eq, gte, lt, ne, or, sql } from "drizzle-orm";
+import {
+  and,
+  avg,
+  count,
+  desc,
+  eq,
+  gte,
+  lt,
+  ne,
+  or,
+  sql,
+  inArray,
+} from "drizzle-orm";
 import { type MapModel } from "../../src/models/mapModel.ts";
 import { type ReservationModel } from "../../src/models/reservtionModel.ts";
 import { db } from "../index.ts";
 import { user } from "../db/auth-schema.ts";
+import { PARTIDA, RESERVAS } from "../models/status.ts";
 
 //Listar los mapas -> Que son las salas
 export async function listarLosMapas() {
@@ -18,8 +31,27 @@ export async function listarLosMapas() {
 
 //Listar el hisotrial de las partidas totales
 // TODO falta filtros
-export async function historialDePartidas() {
-  const result = await db
+//
+//  historialDePartidas: filtros opcionales status (finished = completadas + abandonadas), mapId, from, to.
+//  Montar el where con and(...) y poner cada condición solo si viene el filtro.
+
+export interface HistorialFilters {
+  status?: string;
+  mapId?: string;
+  from?: Date;
+  to?: Date;
+}
+
+export async function historialDePartidas(filters: HistorialFilters = {}) {
+  const { status, mapId, from, to } = filters;
+
+  const statusCondition = status
+    ? status === "finished"
+      ? inArray(gameTable.status, [PARTIDA.completed, PARTIDA.abandoned])
+      : eq(gameTable.status, status)
+    : undefined;
+
+  return await db
     .select({
       id_game: gameTable.id_game,
       id_map: mapTable.id_map,
@@ -45,13 +77,14 @@ export async function historialDePartidas() {
       eq(reservations.id_reservations, gameTable.id_reservations),
     )
     .where(
-      or(
-        eq(gameTable.status, "Abandonada"),
-        eq(gameTable.status, "Completada"),
+      and(
+        statusCondition,
+        mapId ? eq(gameTable.id_map, mapId) : undefined,
+        from ? gte(gameTable.started_at, from) : undefined,
+        to ? lt(gameTable.started_at, to) : undefined,
       ),
     )
     .orderBy(desc(gameTable.started_at));
-  return result;
 }
 
 //Puntuacion media
@@ -61,7 +94,7 @@ export async function getAvgScoreGLOBAL() {
       avgScore: avg(gameTable.score).mapWith(Number),
     })
     .from(gameTable)
-    .where(eq(gameTable.status, "Completada"));
+    .where(eq(gameTable.status, PARTIDA.completed));
   return result;
 }
 
@@ -92,18 +125,19 @@ export async function countReservationNow(fechaHoy: Date) {
       and(
         gte(reservations.reserve_at, startOfDay),
         lt(reservations.reserve_at, startNextDay),
-        ne(reservations.status, "Cancelado"),
+        ne(reservations.status, RESERVAS.cancelled),
       ),
     );
 
-  return result.length;
+  return result;
 }
 
 //DUDA AQUI TODO ---COMPLETADA ?
-async function viewCurrentsMaps(id: string) {
+export async function partidaPorID(id: string) {
   const result = await db
     .select({
       id_game: gameTable.id_game,
+      id_map: mapTable.id_map,
       score: gameTable.score,
       status: gameTable.status,
       startedAt: gameTable.started_at,
@@ -120,6 +154,10 @@ async function viewCurrentsMaps(id: string) {
       is_active: mapTable.is_active,
     })
     .from(gameTable)
+    .innerJoin(
+      reservations,
+      eq(reservations.id_reservations, gameTable.id_reservations),
+    )
     .innerJoin(mapTable, eq(gameTable.id_map, mapTable.id_map))
     .innerJoin(user, eq(gameTable.id_user, user.id))
     .where(eq(gameTable.id_game, id));
@@ -127,6 +165,7 @@ async function viewCurrentsMaps(id: string) {
 }
 
 //Tasa de exito de las partidas compeltas y terminadas.
+// 
 export async function tasaDeExitoGLOBAL(): Promise<number> {
   const [result] = await db
     .select({
@@ -151,7 +190,7 @@ export async function numeroSalasActivas() {
     .select({ total: count() })
     .from(mapTable)
     .where(eq(mapTable.is_active, true));
-  return result;
+  return result[0]?.total;
 }
 
 //Listar las partidas en curso
@@ -177,7 +216,7 @@ export async function partidasEnCurso() {
     )
     .innerJoin(user, eq(user.id, gameTable.id_user))
     .innerJoin(mapTable, eq(gameTable.id_map, mapTable.id_map))
-    .where(eq(gameTable.status, "in Game"));
+    .where(eq(gameTable.status, PARTIDA.in_progress));
   return result;
 }
 
@@ -222,7 +261,7 @@ export async function crearMapa(edit: MapModel) {
     .insert(mapTable)
     .values({
       name: edit.name,
-      difficulty: edit.dificulty,
+      difficulty: edit.difficulty,
       max_score: edit.max_score,
       time_limit: edit.time_limit,
       is_active: edit.is_active,
@@ -237,7 +276,7 @@ export async function editMapa(edit: MapModel, id: string) {
     .update(mapTable)
     .set({
       name: edit.name,
-      difficulty: edit.dificulty,
+      difficulty: edit.difficulty,
       max_score: edit.max_score,
       time_limit: edit.time_limit,
       is_active: edit.is_active,
@@ -277,7 +316,7 @@ export async function eliminarReservacion(id: string) {
   const result = await db
     .update(reservations)
     .set({
-      status: "Cancelled",
+      status: RESERVAS.cancelled,
     })
     .where(eq(reservations.id_reservations, id))
     .returning();

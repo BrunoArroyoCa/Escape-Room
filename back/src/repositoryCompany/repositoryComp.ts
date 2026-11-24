@@ -165,7 +165,7 @@ export async function partidaPorID(id: string) {
 }
 
 //Tasa de exito de las partidas compeltas y terminadas.
-// 
+//
 export async function tasaDeExitoGLOBAL(): Promise<number> {
   const [result] = await db
     .select({
@@ -237,11 +237,40 @@ export async function checkDeSalaHistorial(id: string) {
   return result[0]?.countPartidas === 0;
 }
 
+export async function totalPartidas() {
+  const [result] = await db.select({ total: count() }).from(gameTable);
+  return result?.total ?? 0;
+}
+
+export async function estadisticasPorSala() {
+  return await db
+    .select({
+      id_map: gameTable.id_map,
+      partidas: count(),
+      completadas:
+        sql<number>`count(*) filter (where ${gameTable.status} = ${PARTIDA.completed})`.mapWith(
+          Number,
+        ),
+      puntuacionMedia:
+        sql<number>`avg(${gameTable.score}) filter (where ${gameTable.status} = ${PARTIDA.completed})`.mapWith(
+          Number,
+        ),
+      tiempoMedio:
+        sql<number>`avg(extract(epoch from ${gameTable.ended_at} - ${gameTable.started_at}) / 60) filter (where ${gameTable.status} = ${PARTIDA.completed})`.mapWith(
+          Number,
+        ),
+    })
+    .from(gameTable)
+    .where(
+      or(
+        eq(gameTable.status, PARTIDA.completed),
+        eq(gameTable.status, PARTIDA.abandoned),
+      ),
+    )
+    .groupBy(gameTable.id_map);
+}
+
 //Listar los puzzles por id del mapa TODO
-
-//Puntacion media, numero de partidas, tiempo medio, tasa de exito por sala   ---> sql`avg(extract(epoch from ${gameTable.ended_at} - ${gameTable.started_at})) / 60` ;  <-------- TODO
-
-//Total de partidas globales.  TODO
 
 // Una reserva por id, con sala y usuario, para el editor de reservas.
 // TODO

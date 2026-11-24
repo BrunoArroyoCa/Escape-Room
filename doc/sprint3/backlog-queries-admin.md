@@ -13,12 +13,12 @@ Leyenda de prioridad:
 
 ## 0. Base común
 
-- [ ] **P0 · Unificar los estados.** Hoy están escritos de 5 formas distintas: `"Completada"`/`"Abandonada"`, `'completed'`/`'abandoned'`, `"in Game"`, `"Cancelado"` y `"Cancelled"`.
+- [x] **P0 · Unificar los estados.** Hoy están escritos de 5 formas distintas: `"Completada"`/`"Abandonada"`, `'completed'`/`'abandoned'`, `"in Game"`, `"Cancelado"` y `"Cancelled"`.
   - Crear `src/models/status.ts` con constantes y usarlas en todas las queries.
   - Valores del front:
     - partidas: `in_progress` · `completed` · `abandoned`;
     - reservas: `pending` · `confirmed` · `cancelled` · `completed`.
-- [ ] **P0 · `MapModel`: renombrar `dificulty` → `difficulty`.** El front manda `difficulty`, así que `crearMapa`/`editMapa` reciben `undefined` y el insert falla (`NOT NULL`).
+- [x] **P0 · `MapModel`: renombrar `dificulty` → `difficulty`.** El front manda `difficulty`, así que `crearMapa`/`editMapa` reciben `undefined` y el insert falla (`NOT NULL`).
 - [ ] **P1 · Mover `db` de `src/index.ts` a `src/db/client.ts`.** Cuando `index.ts` sea el servidor habrá un import circular (repositorio → index → services → repositorio). Actualizar también `src/lib/auth.ts`.
 - [ ] **P2 · Limpiar imports.** `../../src/db/schema.ts` → `../db/schema.ts`, y quitar de `index.ts` los imports sin usar.
 
@@ -31,22 +31,45 @@ Leyenda de prioridad:
 | `GET /admin/games/{id}` | `viewCurrentsMaps` |
 | `GET /admin/games/live` | `partidasEnCurso` |
 
-- [ ] **P0 · `viewCurrentsMaps` (detalle de partida).**
+- [x] **P0 · `viewCurrentsMaps` (detalle de partida).**
   - Falta `innerJoin(reservations, …)`: selecciona `reservations.team` sin ese join y Postgres da *missing FROM-clause entry*.
   - Añadir `export` e `id_map` al select.
   - Renombrarla, por ejemplo `partidaPorId`.
-- [ ] **P1 · `historialDePartidas`: filtros opcionales** `status` (`finished` = completadas + abandonadas), `mapId`, `from`, `to`.
+- [x] **P1 · `historialDePartidas`: filtros opcionales** `status` (`finished` = completadas + abandonadas), `mapId`, `from`, `to`.
   - Montar el `where` con `and(...)` y poner cada condición solo si viene el filtro.
-- [ ] **P1 · Total de partidas globales:** `select({ total: count() }).from(gameTable)`.
-- [ ] **P1 · Estadísticas por sala:** `groupBy(gameTable.id_map)` con:
-  - nº de partidas terminadas;
-  - puntuación media (solo completadas);
-  - tiempo medio en minutos: ``sql`avg(extract(epoch from ${gameTable.ended_at} - ${gameTable.started_at})) / 60` ``;
-  - tasa de éxito (completadas / terminadas).
-- [ ] **P1 · `countReservationNow`: devolver `result` (la lista), no `result.length`.**
+- [x] **P1 · Total de partidas globales**
+
+  ```ts
+  export async function totalPartidas() {
+    const [result] = await db.select({ total: count() }).from(gameTable);
+    return result?.total ?? 0;
+  }
+  ```
+
+- [x] **P1 · Estadísticas por sala:** partidas terminadas, puntuación media y tiempo medio (solo completadas), y completadas para la tasa de éxito.
+
+  ```ts
+  export async function estadisticasPorSala() {
+    return await db
+      .select({
+        id_map: gameTable.id_map,
+        partidas: count(),
+        completadas: sql<number>`count(*) filter (where ${gameTable.status} = ${PARTIDA.completed})`.mapWith(Number),
+        puntuacionMedia: sql<number>`avg(${gameTable.score}) filter (where ${gameTable.status} = ${PARTIDA.completed})`.mapWith(Number),
+        tiempoMedio: sql<number>`avg(extract(epoch from ${gameTable.ended_at} - ${gameTable.started_at}) / 60) filter (where ${gameTable.status} = ${PARTIDA.completed})`.mapWith(Number),
+      })
+      .from(gameTable)
+      .where(or(eq(gameTable.status, PARTIDA.completed), eq(gameTable.status, PARTIDA.abandoned)))
+      .groupBy(gameTable.id_map);
+  }
+  ```
+
+  - Tasa de éxito de cada sala: `completadas / partidas`, calculada en el service.
+  - Las salas sin partidas no aparecen; el service las completa con `listarLosMapas`.
+- [x] **P1 · `countReservationNow`: devolver `result` (la lista), no `result.length`.**
   - El plano necesita las reservas de hoy para mostrar la siguiente de cada sala; el conteo se hace en el service.
-- [ ] **P2 · `numeroSalasActivas`:** devolver el número (`result[0]?.total ?? 0`), no `[{ total }]`.
-- [ ] **P2 · `tasaDeExitoGLOBAL`:** devuelve 0–100 y el front espera 0–1. Convertir en el service o en la query.
+- [x] **P2 · `numeroSalasActivas`:** devolver el número (`result[0]?.total ?? 0`), no `[{ total }]`.
+- [x] **P2 · `tasaDeExitoGLOBAL`:** devuelve 0–100 y el front espera 0–1. Convertir en el service o en la query.
 
 ## 2. Salas y puzzles
 
